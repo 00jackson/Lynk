@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "lib": ["dom", "dom.iterable", "esnext"],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "baseUrl": ".",
+      "paths": {
+        "@lynk/prisma/client": ["packages/prisma/prisma/client"],
+        "@/*": ["apps/web/*"]
+      }
+    },
+    "exclude": ["node_modules"],
+    "include": ["packages", "apps"]
+  }
