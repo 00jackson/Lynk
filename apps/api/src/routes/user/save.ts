@@ -1,8 +1,5 @@
-// apps/api/src/routes/user/save.ts
-
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@lynk/prisma/client';
-
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -16,16 +13,17 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const profile = await prisma.userProfile.create({
-      data: { userId, name, role, skills },
+    const profile = await prisma.userProfile.upsert({
+      where: { userId },
+      update: { name, role, skills },
+      create: { userId, name, role, skills },
     });
 
     res.status(200).json(profile);
   } catch (error: any) {
-    console.error('Save user error:', error); // 👈 log it properly
+    console.error('Save user error:', error);
     res.status(500).json({ error: 'Failed to save user', detail: error.message });
   }
 });
-
 
 export default router;
