@@ -23,6 +23,11 @@ export type UserProfile = $Result.DefaultSelection<Prisma.$UserProfilePayload>
  * 
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
+/**
+ * Model HelpRequest
+ * 
+ */
+export type HelpRequest = $Result.DefaultSelection<Prisma.$HelpRequestPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -168,6 +173,16 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.helpRequest`: Exposes CRUD operations for the **HelpRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more HelpRequests
+    * const helpRequests = await prisma.helpRequest.findMany()
+    * ```
+    */
+  get helpRequest(): Prisma.HelpRequestDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -609,7 +624,8 @@ export namespace Prisma {
 
   export const ModelName: {
     UserProfile: 'UserProfile',
-    Project: 'Project'
+    Project: 'Project',
+    HelpRequest: 'HelpRequest'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -628,7 +644,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "userProfile" | "project"
+      modelProps: "userProfile" | "project" | "helpRequest"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -780,6 +796,80 @@ export namespace Prisma {
           }
         }
       }
+      HelpRequest: {
+        payload: Prisma.$HelpRequestPayload<ExtArgs>
+        fields: Prisma.HelpRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HelpRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HelpRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.HelpRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HelpRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          findMany: {
+            args: Prisma.HelpRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>[]
+          }
+          create: {
+            args: Prisma.HelpRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          createMany: {
+            args: Prisma.HelpRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HelpRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.HelpRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          update: {
+            args: Prisma.HelpRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.HelpRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HelpRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HelpRequestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>[]
+          }
+          upsert: {
+            args: Prisma.HelpRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HelpRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.HelpRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHelpRequest>
+          }
+          groupBy: {
+            args: Prisma.HelpRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HelpRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HelpRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<HelpRequestCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -866,6 +956,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     userProfile?: UserProfileOmit
     project?: ProjectOmit
+    helpRequest?: HelpRequestOmit
   }
 
   /* Types for Logging */
@@ -961,10 +1052,12 @@ export namespace Prisma {
 
   export type UserProfileCountOutputType = {
     projects: number
+    HelpRequest: number
   }
 
   export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | UserProfileCountOutputTypeCountProjectsArgs
+    HelpRequest?: boolean | UserProfileCountOutputTypeCountHelpRequestArgs
   }
 
   // Custom InputTypes
@@ -983,6 +1076,13 @@ export namespace Prisma {
    */
   export type UserProfileCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProjectWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountHelpRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HelpRequestWhereInput
   }
 
 
@@ -1159,6 +1259,7 @@ export namespace Prisma {
     skills?: boolean
     createdAt?: boolean
     projects?: boolean | UserProfile$projectsArgs<ExtArgs>
+    HelpRequest?: boolean | UserProfile$HelpRequestArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -1192,6 +1293,7 @@ export namespace Prisma {
   export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "role" | "skills" | "createdAt", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projects?: boolean | UserProfile$projectsArgs<ExtArgs>
+    HelpRequest?: boolean | UserProfile$HelpRequestArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1201,6 +1303,7 @@ export namespace Prisma {
     name: "UserProfile"
     objects: {
       projects: Prisma.$ProjectPayload<ExtArgs>[]
+      HelpRequest: Prisma.$HelpRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1604,6 +1707,7 @@ export namespace Prisma {
   export interface Prisma__UserProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     projects<T extends UserProfile$projectsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    HelpRequest<T extends UserProfile$HelpRequestArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$HelpRequestArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2048,6 +2152,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.HelpRequest
+   */
+  export type UserProfile$HelpRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    where?: HelpRequestWhereInput
+    orderBy?: HelpRequestOrderByWithRelationInput | HelpRequestOrderByWithRelationInput[]
+    cursor?: HelpRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HelpRequestScalarFieldEnum | HelpRequestScalarFieldEnum[]
   }
 
   /**
@@ -3163,6 +3291,1077 @@ export namespace Prisma {
 
 
   /**
+   * Model HelpRequest
+   */
+
+  export type AggregateHelpRequest = {
+    _count: HelpRequestCountAggregateOutputType | null
+    _min: HelpRequestMinAggregateOutputType | null
+    _max: HelpRequestMaxAggregateOutputType | null
+  }
+
+  export type HelpRequestMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    message: string | null
+    status: string | null
+    coachId: string | null
+    createdAt: Date | null
+  }
+
+  export type HelpRequestMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    message: string | null
+    status: string | null
+    coachId: string | null
+    createdAt: Date | null
+  }
+
+  export type HelpRequestCountAggregateOutputType = {
+    id: number
+    userId: number
+    message: number
+    status: number
+    coachId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type HelpRequestMinAggregateInputType = {
+    id?: true
+    userId?: true
+    message?: true
+    status?: true
+    coachId?: true
+    createdAt?: true
+  }
+
+  export type HelpRequestMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    message?: true
+    status?: true
+    coachId?: true
+    createdAt?: true
+  }
+
+  export type HelpRequestCountAggregateInputType = {
+    id?: true
+    userId?: true
+    message?: true
+    status?: true
+    coachId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type HelpRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HelpRequest to aggregate.
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HelpRequests to fetch.
+     */
+    orderBy?: HelpRequestOrderByWithRelationInput | HelpRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HelpRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HelpRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HelpRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned HelpRequests
+    **/
+    _count?: true | HelpRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HelpRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HelpRequestMaxAggregateInputType
+  }
+
+  export type GetHelpRequestAggregateType<T extends HelpRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateHelpRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHelpRequest[P]>
+      : GetScalarType<T[P], AggregateHelpRequest[P]>
+  }
+
+
+
+
+  export type HelpRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HelpRequestWhereInput
+    orderBy?: HelpRequestOrderByWithAggregationInput | HelpRequestOrderByWithAggregationInput[]
+    by: HelpRequestScalarFieldEnum[] | HelpRequestScalarFieldEnum
+    having?: HelpRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HelpRequestCountAggregateInputType | true
+    _min?: HelpRequestMinAggregateInputType
+    _max?: HelpRequestMaxAggregateInputType
+  }
+
+  export type HelpRequestGroupByOutputType = {
+    id: string
+    userId: string
+    message: string
+    status: string
+    coachId: string | null
+    createdAt: Date
+    _count: HelpRequestCountAggregateOutputType | null
+    _min: HelpRequestMinAggregateOutputType | null
+    _max: HelpRequestMaxAggregateOutputType | null
+  }
+
+  type GetHelpRequestGroupByPayload<T extends HelpRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HelpRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HelpRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HelpRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], HelpRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HelpRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    message?: boolean
+    status?: boolean
+    coachId?: boolean
+    createdAt?: boolean
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["helpRequest"]>
+
+  export type HelpRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    message?: boolean
+    status?: boolean
+    coachId?: boolean
+    createdAt?: boolean
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["helpRequest"]>
+
+  export type HelpRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    message?: boolean
+    status?: boolean
+    coachId?: boolean
+    createdAt?: boolean
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["helpRequest"]>
+
+  export type HelpRequestSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    message?: boolean
+    status?: boolean
+    coachId?: boolean
+    createdAt?: boolean
+  }
+
+  export type HelpRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "message" | "status" | "coachId" | "createdAt", ExtArgs["result"]["helpRequest"]>
+  export type HelpRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type HelpRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type HelpRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $HelpRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "HelpRequest"
+    objects: {
+      userProfile: Prisma.$UserProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      message: string
+      status: string
+      coachId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["helpRequest"]>
+    composites: {}
+  }
+
+  type HelpRequestGetPayload<S extends boolean | null | undefined | HelpRequestDefaultArgs> = $Result.GetResult<Prisma.$HelpRequestPayload, S>
+
+  type HelpRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HelpRequestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HelpRequestCountAggregateInputType | true
+    }
+
+  export interface HelpRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['HelpRequest'], meta: { name: 'HelpRequest' } }
+    /**
+     * Find zero or one HelpRequest that matches the filter.
+     * @param {HelpRequestFindUniqueArgs} args - Arguments to find a HelpRequest
+     * @example
+     * // Get one HelpRequest
+     * const helpRequest = await prisma.helpRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HelpRequestFindUniqueArgs>(args: SelectSubset<T, HelpRequestFindUniqueArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one HelpRequest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HelpRequestFindUniqueOrThrowArgs} args - Arguments to find a HelpRequest
+     * @example
+     * // Get one HelpRequest
+     * const helpRequest = await prisma.helpRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HelpRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, HelpRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HelpRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestFindFirstArgs} args - Arguments to find a HelpRequest
+     * @example
+     * // Get one HelpRequest
+     * const helpRequest = await prisma.helpRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HelpRequestFindFirstArgs>(args?: SelectSubset<T, HelpRequestFindFirstArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first HelpRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestFindFirstOrThrowArgs} args - Arguments to find a HelpRequest
+     * @example
+     * // Get one HelpRequest
+     * const helpRequest = await prisma.helpRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HelpRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, HelpRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more HelpRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all HelpRequests
+     * const helpRequests = await prisma.helpRequest.findMany()
+     * 
+     * // Get first 10 HelpRequests
+     * const helpRequests = await prisma.helpRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const helpRequestWithIdOnly = await prisma.helpRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HelpRequestFindManyArgs>(args?: SelectSubset<T, HelpRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a HelpRequest.
+     * @param {HelpRequestCreateArgs} args - Arguments to create a HelpRequest.
+     * @example
+     * // Create one HelpRequest
+     * const HelpRequest = await prisma.helpRequest.create({
+     *   data: {
+     *     // ... data to create a HelpRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends HelpRequestCreateArgs>(args: SelectSubset<T, HelpRequestCreateArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many HelpRequests.
+     * @param {HelpRequestCreateManyArgs} args - Arguments to create many HelpRequests.
+     * @example
+     * // Create many HelpRequests
+     * const helpRequest = await prisma.helpRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HelpRequestCreateManyArgs>(args?: SelectSubset<T, HelpRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many HelpRequests and returns the data saved in the database.
+     * @param {HelpRequestCreateManyAndReturnArgs} args - Arguments to create many HelpRequests.
+     * @example
+     * // Create many HelpRequests
+     * const helpRequest = await prisma.helpRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many HelpRequests and only return the `id`
+     * const helpRequestWithIdOnly = await prisma.helpRequest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HelpRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, HelpRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a HelpRequest.
+     * @param {HelpRequestDeleteArgs} args - Arguments to delete one HelpRequest.
+     * @example
+     * // Delete one HelpRequest
+     * const HelpRequest = await prisma.helpRequest.delete({
+     *   where: {
+     *     // ... filter to delete one HelpRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HelpRequestDeleteArgs>(args: SelectSubset<T, HelpRequestDeleteArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one HelpRequest.
+     * @param {HelpRequestUpdateArgs} args - Arguments to update one HelpRequest.
+     * @example
+     * // Update one HelpRequest
+     * const helpRequest = await prisma.helpRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HelpRequestUpdateArgs>(args: SelectSubset<T, HelpRequestUpdateArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more HelpRequests.
+     * @param {HelpRequestDeleteManyArgs} args - Arguments to filter HelpRequests to delete.
+     * @example
+     * // Delete a few HelpRequests
+     * const { count } = await prisma.helpRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HelpRequestDeleteManyArgs>(args?: SelectSubset<T, HelpRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HelpRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many HelpRequests
+     * const helpRequest = await prisma.helpRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HelpRequestUpdateManyArgs>(args: SelectSubset<T, HelpRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more HelpRequests and returns the data updated in the database.
+     * @param {HelpRequestUpdateManyAndReturnArgs} args - Arguments to update many HelpRequests.
+     * @example
+     * // Update many HelpRequests
+     * const helpRequest = await prisma.helpRequest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more HelpRequests and only return the `id`
+     * const helpRequestWithIdOnly = await prisma.helpRequest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HelpRequestUpdateManyAndReturnArgs>(args: SelectSubset<T, HelpRequestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one HelpRequest.
+     * @param {HelpRequestUpsertArgs} args - Arguments to update or create a HelpRequest.
+     * @example
+     * // Update or create a HelpRequest
+     * const helpRequest = await prisma.helpRequest.upsert({
+     *   create: {
+     *     // ... data to create a HelpRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the HelpRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HelpRequestUpsertArgs>(args: SelectSubset<T, HelpRequestUpsertArgs<ExtArgs>>): Prisma__HelpRequestClient<$Result.GetResult<Prisma.$HelpRequestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of HelpRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestCountArgs} args - Arguments to filter HelpRequests to count.
+     * @example
+     * // Count the number of HelpRequests
+     * const count = await prisma.helpRequest.count({
+     *   where: {
+     *     // ... the filter for the HelpRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends HelpRequestCountArgs>(
+      args?: Subset<T, HelpRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HelpRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a HelpRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HelpRequestAggregateArgs>(args: Subset<T, HelpRequestAggregateArgs>): Prisma.PrismaPromise<GetHelpRequestAggregateType<T>>
+
+    /**
+     * Group by HelpRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HelpRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HelpRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HelpRequestGroupByArgs['orderBy'] }
+        : { orderBy?: HelpRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HelpRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHelpRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the HelpRequest model
+   */
+  readonly fields: HelpRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for HelpRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HelpRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the HelpRequest model
+   */
+  interface HelpRequestFieldRefs {
+    readonly id: FieldRef<"HelpRequest", 'String'>
+    readonly userId: FieldRef<"HelpRequest", 'String'>
+    readonly message: FieldRef<"HelpRequest", 'String'>
+    readonly status: FieldRef<"HelpRequest", 'String'>
+    readonly coachId: FieldRef<"HelpRequest", 'String'>
+    readonly createdAt: FieldRef<"HelpRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * HelpRequest findUnique
+   */
+  export type HelpRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which HelpRequest to fetch.
+     */
+    where: HelpRequestWhereUniqueInput
+  }
+
+  /**
+   * HelpRequest findUniqueOrThrow
+   */
+  export type HelpRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which HelpRequest to fetch.
+     */
+    where: HelpRequestWhereUniqueInput
+  }
+
+  /**
+   * HelpRequest findFirst
+   */
+  export type HelpRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which HelpRequest to fetch.
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HelpRequests to fetch.
+     */
+    orderBy?: HelpRequestOrderByWithRelationInput | HelpRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HelpRequests.
+     */
+    cursor?: HelpRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HelpRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HelpRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HelpRequests.
+     */
+    distinct?: HelpRequestScalarFieldEnum | HelpRequestScalarFieldEnum[]
+  }
+
+  /**
+   * HelpRequest findFirstOrThrow
+   */
+  export type HelpRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which HelpRequest to fetch.
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HelpRequests to fetch.
+     */
+    orderBy?: HelpRequestOrderByWithRelationInput | HelpRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for HelpRequests.
+     */
+    cursor?: HelpRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HelpRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HelpRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of HelpRequests.
+     */
+    distinct?: HelpRequestScalarFieldEnum | HelpRequestScalarFieldEnum[]
+  }
+
+  /**
+   * HelpRequest findMany
+   */
+  export type HelpRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which HelpRequests to fetch.
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of HelpRequests to fetch.
+     */
+    orderBy?: HelpRequestOrderByWithRelationInput | HelpRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing HelpRequests.
+     */
+    cursor?: HelpRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` HelpRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` HelpRequests.
+     */
+    skip?: number
+    distinct?: HelpRequestScalarFieldEnum | HelpRequestScalarFieldEnum[]
+  }
+
+  /**
+   * HelpRequest create
+   */
+  export type HelpRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a HelpRequest.
+     */
+    data: XOR<HelpRequestCreateInput, HelpRequestUncheckedCreateInput>
+  }
+
+  /**
+   * HelpRequest createMany
+   */
+  export type HelpRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many HelpRequests.
+     */
+    data: HelpRequestCreateManyInput | HelpRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * HelpRequest createManyAndReturn
+   */
+  export type HelpRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * The data used to create many HelpRequests.
+     */
+    data: HelpRequestCreateManyInput | HelpRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HelpRequest update
+   */
+  export type HelpRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a HelpRequest.
+     */
+    data: XOR<HelpRequestUpdateInput, HelpRequestUncheckedUpdateInput>
+    /**
+     * Choose, which HelpRequest to update.
+     */
+    where: HelpRequestWhereUniqueInput
+  }
+
+  /**
+   * HelpRequest updateMany
+   */
+  export type HelpRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update HelpRequests.
+     */
+    data: XOR<HelpRequestUpdateManyMutationInput, HelpRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which HelpRequests to update
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * Limit how many HelpRequests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * HelpRequest updateManyAndReturn
+   */
+  export type HelpRequestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * The data used to update HelpRequests.
+     */
+    data: XOR<HelpRequestUpdateManyMutationInput, HelpRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which HelpRequests to update
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * Limit how many HelpRequests to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * HelpRequest upsert
+   */
+  export type HelpRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the HelpRequest to update in case it exists.
+     */
+    where: HelpRequestWhereUniqueInput
+    /**
+     * In case the HelpRequest found by the `where` argument doesn't exist, create a new HelpRequest with this data.
+     */
+    create: XOR<HelpRequestCreateInput, HelpRequestUncheckedCreateInput>
+    /**
+     * In case the HelpRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HelpRequestUpdateInput, HelpRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * HelpRequest delete
+   */
+  export type HelpRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+    /**
+     * Filter which HelpRequest to delete.
+     */
+    where: HelpRequestWhereUniqueInput
+  }
+
+  /**
+   * HelpRequest deleteMany
+   */
+  export type HelpRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which HelpRequests to delete
+     */
+    where?: HelpRequestWhereInput
+    /**
+     * Limit how many HelpRequests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * HelpRequest without action
+   */
+  export type HelpRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HelpRequest
+     */
+    select?: HelpRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HelpRequest
+     */
+    omit?: HelpRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HelpRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -3200,6 +4399,18 @@ export namespace Prisma {
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+  export const HelpRequestScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    message: 'message',
+    status: 'status',
+    coachId: 'coachId',
+    createdAt: 'createdAt'
+  };
+
+  export type HelpRequestScalarFieldEnum = (typeof HelpRequestScalarFieldEnum)[keyof typeof HelpRequestScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3287,6 +4498,7 @@ export namespace Prisma {
     skills?: StringNullableListFilter<"UserProfile">
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     projects?: ProjectListRelationFilter
+    HelpRequest?: HelpRequestListRelationFilter
   }
 
   export type UserProfileOrderByWithRelationInput = {
@@ -3297,6 +4509,7 @@ export namespace Prisma {
     skills?: SortOrder
     createdAt?: SortOrder
     projects?: ProjectOrderByRelationAggregateInput
+    HelpRequest?: HelpRequestOrderByRelationAggregateInput
   }
 
   export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -3310,6 +4523,7 @@ export namespace Prisma {
     skills?: StringNullableListFilter<"UserProfile">
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     projects?: ProjectListRelationFilter
+    HelpRequest?: HelpRequestListRelationFilter
   }, "id" | "userId">
 
   export type UserProfileOrderByWithAggregationInput = {
@@ -3406,6 +4620,66 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
   }
 
+  export type HelpRequestWhereInput = {
+    AND?: HelpRequestWhereInput | HelpRequestWhereInput[]
+    OR?: HelpRequestWhereInput[]
+    NOT?: HelpRequestWhereInput | HelpRequestWhereInput[]
+    id?: StringFilter<"HelpRequest"> | string
+    userId?: StringFilter<"HelpRequest"> | string
+    message?: StringFilter<"HelpRequest"> | string
+    status?: StringFilter<"HelpRequest"> | string
+    coachId?: StringNullableFilter<"HelpRequest"> | string | null
+    createdAt?: DateTimeFilter<"HelpRequest"> | Date | string
+    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }
+
+  export type HelpRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    coachId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    userProfile?: UserProfileOrderByWithRelationInput
+  }
+
+  export type HelpRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: HelpRequestWhereInput | HelpRequestWhereInput[]
+    OR?: HelpRequestWhereInput[]
+    NOT?: HelpRequestWhereInput | HelpRequestWhereInput[]
+    userId?: StringFilter<"HelpRequest"> | string
+    message?: StringFilter<"HelpRequest"> | string
+    status?: StringFilter<"HelpRequest"> | string
+    coachId?: StringNullableFilter<"HelpRequest"> | string | null
+    createdAt?: DateTimeFilter<"HelpRequest"> | Date | string
+    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }, "id">
+
+  export type HelpRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    coachId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: HelpRequestCountOrderByAggregateInput
+    _max?: HelpRequestMaxOrderByAggregateInput
+    _min?: HelpRequestMinOrderByAggregateInput
+  }
+
+  export type HelpRequestScalarWhereWithAggregatesInput = {
+    AND?: HelpRequestScalarWhereWithAggregatesInput | HelpRequestScalarWhereWithAggregatesInput[]
+    OR?: HelpRequestScalarWhereWithAggregatesInput[]
+    NOT?: HelpRequestScalarWhereWithAggregatesInput | HelpRequestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"HelpRequest"> | string
+    userId?: StringWithAggregatesFilter<"HelpRequest"> | string
+    message?: StringWithAggregatesFilter<"HelpRequest"> | string
+    status?: StringWithAggregatesFilter<"HelpRequest"> | string
+    coachId?: StringNullableWithAggregatesFilter<"HelpRequest"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"HelpRequest"> | Date | string
+  }
+
   export type UserProfileCreateInput = {
     id?: string
     userId: string
@@ -3414,6 +4688,7 @@ export namespace Prisma {
     skills?: UserProfileCreateskillsInput | string[]
     createdAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutUserProfileInput
+    HelpRequest?: HelpRequestCreateNestedManyWithoutUserProfileInput
   }
 
   export type UserProfileUncheckedCreateInput = {
@@ -3424,6 +4699,7 @@ export namespace Prisma {
     skills?: UserProfileCreateskillsInput | string[]
     createdAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutUserProfileInput
+    HelpRequest?: HelpRequestUncheckedCreateNestedManyWithoutUserProfileInput
   }
 
   export type UserProfileUpdateInput = {
@@ -3434,6 +4710,7 @@ export namespace Prisma {
     skills?: UserProfileUpdateskillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutUserProfileNestedInput
+    HelpRequest?: HelpRequestUpdateManyWithoutUserProfileNestedInput
   }
 
   export type UserProfileUncheckedUpdateInput = {
@@ -3444,6 +4721,7 @@ export namespace Prisma {
     skills?: UserProfileUpdateskillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutUserProfileNestedInput
+    HelpRequest?: HelpRequestUncheckedUpdateManyWithoutUserProfileNestedInput
   }
 
   export type UserProfileCreateManyInput = {
@@ -3549,6 +4827,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type HelpRequestCreateInput = {
+    id?: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
+    userProfile: UserProfileCreateNestedOneWithoutHelpRequestInput
+  }
+
+  export type HelpRequestUncheckedCreateInput = {
+    id?: string
+    userId: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type HelpRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUpdateOneRequiredWithoutHelpRequestNestedInput
+  }
+
+  export type HelpRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HelpRequestCreateManyInput = {
+    id?: string
+    userId: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type HelpRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HelpRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -3589,7 +4929,17 @@ export namespace Prisma {
     none?: ProjectWhereInput
   }
 
+  export type HelpRequestListRelationFilter = {
+    every?: HelpRequestWhereInput
+    some?: HelpRequestWhereInput
+    none?: HelpRequestWhereInput
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type HelpRequestOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3724,6 +5074,33 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type HelpRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    coachId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type HelpRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    coachId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type HelpRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    coachId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type UserProfileCreateskillsInput = {
     set: string[]
   }
@@ -3735,11 +5112,25 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
+  export type HelpRequestCreateNestedManyWithoutUserProfileInput = {
+    create?: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput> | HelpRequestCreateWithoutUserProfileInput[] | HelpRequestUncheckedCreateWithoutUserProfileInput[]
+    connectOrCreate?: HelpRequestCreateOrConnectWithoutUserProfileInput | HelpRequestCreateOrConnectWithoutUserProfileInput[]
+    createMany?: HelpRequestCreateManyUserProfileInputEnvelope
+    connect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutUserProfileInput = {
     create?: XOR<ProjectCreateWithoutUserProfileInput, ProjectUncheckedCreateWithoutUserProfileInput> | ProjectCreateWithoutUserProfileInput[] | ProjectUncheckedCreateWithoutUserProfileInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutUserProfileInput | ProjectCreateOrConnectWithoutUserProfileInput[]
     createMany?: ProjectCreateManyUserProfileInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type HelpRequestUncheckedCreateNestedManyWithoutUserProfileInput = {
+    create?: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput> | HelpRequestCreateWithoutUserProfileInput[] | HelpRequestUncheckedCreateWithoutUserProfileInput[]
+    connectOrCreate?: HelpRequestCreateOrConnectWithoutUserProfileInput | HelpRequestCreateOrConnectWithoutUserProfileInput[]
+    createMany?: HelpRequestCreateManyUserProfileInputEnvelope
+    connect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3769,6 +5160,20 @@ export namespace Prisma {
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
+  export type HelpRequestUpdateManyWithoutUserProfileNestedInput = {
+    create?: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput> | HelpRequestCreateWithoutUserProfileInput[] | HelpRequestUncheckedCreateWithoutUserProfileInput[]
+    connectOrCreate?: HelpRequestCreateOrConnectWithoutUserProfileInput | HelpRequestCreateOrConnectWithoutUserProfileInput[]
+    upsert?: HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput | HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput[]
+    createMany?: HelpRequestCreateManyUserProfileInputEnvelope
+    set?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    disconnect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    delete?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    connect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    update?: HelpRequestUpdateWithWhereUniqueWithoutUserProfileInput | HelpRequestUpdateWithWhereUniqueWithoutUserProfileInput[]
+    updateMany?: HelpRequestUpdateManyWithWhereWithoutUserProfileInput | HelpRequestUpdateManyWithWhereWithoutUserProfileInput[]
+    deleteMany?: HelpRequestScalarWhereInput | HelpRequestScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutUserProfileNestedInput = {
     create?: XOR<ProjectCreateWithoutUserProfileInput, ProjectUncheckedCreateWithoutUserProfileInput> | ProjectCreateWithoutUserProfileInput[] | ProjectUncheckedCreateWithoutUserProfileInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutUserProfileInput | ProjectCreateOrConnectWithoutUserProfileInput[]
@@ -3781,6 +5186,20 @@ export namespace Prisma {
     update?: ProjectUpdateWithWhereUniqueWithoutUserProfileInput | ProjectUpdateWithWhereUniqueWithoutUserProfileInput[]
     updateMany?: ProjectUpdateManyWithWhereWithoutUserProfileInput | ProjectUpdateManyWithWhereWithoutUserProfileInput[]
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type HelpRequestUncheckedUpdateManyWithoutUserProfileNestedInput = {
+    create?: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput> | HelpRequestCreateWithoutUserProfileInput[] | HelpRequestUncheckedCreateWithoutUserProfileInput[]
+    connectOrCreate?: HelpRequestCreateOrConnectWithoutUserProfileInput | HelpRequestCreateOrConnectWithoutUserProfileInput[]
+    upsert?: HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput | HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput[]
+    createMany?: HelpRequestCreateManyUserProfileInputEnvelope
+    set?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    disconnect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    delete?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    connect?: HelpRequestWhereUniqueInput | HelpRequestWhereUniqueInput[]
+    update?: HelpRequestUpdateWithWhereUniqueWithoutUserProfileInput | HelpRequestUpdateWithWhereUniqueWithoutUserProfileInput[]
+    updateMany?: HelpRequestUpdateManyWithWhereWithoutUserProfileInput | HelpRequestUpdateManyWithWhereWithoutUserProfileInput[]
+    deleteMany?: HelpRequestScalarWhereInput | HelpRequestScalarWhereInput[]
   }
 
   export type ProjectCreatetechStackInput = {
@@ -3808,6 +5227,20 @@ export namespace Prisma {
     upsert?: UserProfileUpsertWithoutProjectsInput
     connect?: UserProfileWhereUniqueInput
     update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutProjectsInput, UserProfileUpdateWithoutProjectsInput>, UserProfileUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type UserProfileCreateNestedOneWithoutHelpRequestInput = {
+    create?: XOR<UserProfileCreateWithoutHelpRequestInput, UserProfileUncheckedCreateWithoutHelpRequestInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutHelpRequestInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutHelpRequestNestedInput = {
+    create?: XOR<UserProfileCreateWithoutHelpRequestInput, UserProfileUncheckedCreateWithoutHelpRequestInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutHelpRequestInput
+    upsert?: UserProfileUpsertWithoutHelpRequestInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutHelpRequestInput, UserProfileUpdateWithoutHelpRequestInput>, UserProfileUncheckedUpdateWithoutHelpRequestInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -3949,6 +5382,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type HelpRequestCreateWithoutUserProfileInput = {
+    id?: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type HelpRequestUncheckedCreateWithoutUserProfileInput = {
+    id?: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type HelpRequestCreateOrConnectWithoutUserProfileInput = {
+    where: HelpRequestWhereUniqueInput
+    create: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput>
+  }
+
+  export type HelpRequestCreateManyUserProfileInputEnvelope = {
+    data: HelpRequestCreateManyUserProfileInput | HelpRequestCreateManyUserProfileInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutUserProfileInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutUserProfileInput, ProjectUncheckedUpdateWithoutUserProfileInput>
@@ -3979,6 +5438,34 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
   }
 
+  export type HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput = {
+    where: HelpRequestWhereUniqueInput
+    update: XOR<HelpRequestUpdateWithoutUserProfileInput, HelpRequestUncheckedUpdateWithoutUserProfileInput>
+    create: XOR<HelpRequestCreateWithoutUserProfileInput, HelpRequestUncheckedCreateWithoutUserProfileInput>
+  }
+
+  export type HelpRequestUpdateWithWhereUniqueWithoutUserProfileInput = {
+    where: HelpRequestWhereUniqueInput
+    data: XOR<HelpRequestUpdateWithoutUserProfileInput, HelpRequestUncheckedUpdateWithoutUserProfileInput>
+  }
+
+  export type HelpRequestUpdateManyWithWhereWithoutUserProfileInput = {
+    where: HelpRequestScalarWhereInput
+    data: XOR<HelpRequestUpdateManyMutationInput, HelpRequestUncheckedUpdateManyWithoutUserProfileInput>
+  }
+
+  export type HelpRequestScalarWhereInput = {
+    AND?: HelpRequestScalarWhereInput | HelpRequestScalarWhereInput[]
+    OR?: HelpRequestScalarWhereInput[]
+    NOT?: HelpRequestScalarWhereInput | HelpRequestScalarWhereInput[]
+    id?: StringFilter<"HelpRequest"> | string
+    userId?: StringFilter<"HelpRequest"> | string
+    message?: StringFilter<"HelpRequest"> | string
+    status?: StringFilter<"HelpRequest"> | string
+    coachId?: StringNullableFilter<"HelpRequest"> | string | null
+    createdAt?: DateTimeFilter<"HelpRequest"> | Date | string
+  }
+
   export type UserProfileCreateWithoutProjectsInput = {
     id?: string
     userId: string
@@ -3986,6 +5473,7 @@ export namespace Prisma {
     role: string
     skills?: UserProfileCreateskillsInput | string[]
     createdAt?: Date | string
+    HelpRequest?: HelpRequestCreateNestedManyWithoutUserProfileInput
   }
 
   export type UserProfileUncheckedCreateWithoutProjectsInput = {
@@ -3995,6 +5483,7 @@ export namespace Prisma {
     role: string
     skills?: UserProfileCreateskillsInput | string[]
     createdAt?: Date | string
+    HelpRequest?: HelpRequestUncheckedCreateNestedManyWithoutUserProfileInput
   }
 
   export type UserProfileCreateOrConnectWithoutProjectsInput = {
@@ -4020,6 +5509,7 @@ export namespace Prisma {
     role?: StringFieldUpdateOperationsInput | string
     skills?: UserProfileUpdateskillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    HelpRequest?: HelpRequestUpdateManyWithoutUserProfileNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProjectsInput = {
@@ -4029,6 +5519,63 @@ export namespace Prisma {
     role?: StringFieldUpdateOperationsInput | string
     skills?: UserProfileUpdateskillsInput | string[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    HelpRequest?: HelpRequestUncheckedUpdateManyWithoutUserProfileNestedInput
+  }
+
+  export type UserProfileCreateWithoutHelpRequestInput = {
+    id?: string
+    userId: string
+    name: string
+    role: string
+    skills?: UserProfileCreateskillsInput | string[]
+    createdAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutUserProfileInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutHelpRequestInput = {
+    id?: string
+    userId: string
+    name: string
+    role: string
+    skills?: UserProfileCreateskillsInput | string[]
+    createdAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutUserProfileInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutHelpRequestInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutHelpRequestInput, UserProfileUncheckedCreateWithoutHelpRequestInput>
+  }
+
+  export type UserProfileUpsertWithoutHelpRequestInput = {
+    update: XOR<UserProfileUpdateWithoutHelpRequestInput, UserProfileUncheckedUpdateWithoutHelpRequestInput>
+    create: XOR<UserProfileCreateWithoutHelpRequestInput, UserProfileUncheckedCreateWithoutHelpRequestInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutHelpRequestInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutHelpRequestInput, UserProfileUncheckedUpdateWithoutHelpRequestInput>
+  }
+
+  export type UserProfileUpdateWithoutHelpRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    skills?: UserProfileUpdateskillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutUserProfileNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutHelpRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    skills?: UserProfileUpdateskillsInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutUserProfileNestedInput
   }
 
   export type ProjectCreateManyUserProfileInput = {
@@ -4039,6 +5586,14 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type HelpRequestCreateManyUserProfileInput = {
+    id?: string
+    message: string
+    status?: string
+    coachId?: string | null
+    createdAt?: Date | string
   }
 
   export type ProjectUpdateWithoutUserProfileInput = {
@@ -4069,6 +5624,30 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HelpRequestUpdateWithoutUserProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HelpRequestUncheckedUpdateWithoutUserProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HelpRequestUncheckedUpdateManyWithoutUserProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    coachId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
