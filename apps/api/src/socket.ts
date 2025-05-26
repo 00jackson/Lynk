@@ -1,4 +1,4 @@
-import {  Server } from 'socket.io';
+import {  Socket, Server } from 'socket.io';
 import type { Server as HttpServer } from 'http';
 
 export function setupSocket(server: HttpServer) {
@@ -11,7 +11,7 @@ export function setupSocket(server: HttpServer) {
 
   const activeUsers = new Set<string>();
 
-  io.on('connection', (socket) => {
+  io.on('connection', (socket: Socket) => {
     console.log('[Socket] A user connected:', socket.id);
 
     socket.on('user:join', (userId: string) => {
