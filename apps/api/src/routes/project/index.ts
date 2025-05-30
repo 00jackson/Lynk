@@ -27,7 +27,24 @@ router.get('/', async (req: Request, res: Response) => {
 // ✅ ADD THIS:
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { userId, title, description, techStack, link } = req.body;
+    const {
+      userId,
+      title,
+      description,
+      techStack,
+      link,
+      folder,
+      startDate,
+      endDate,
+      notes,
+      baseRate,
+      minBudget,
+      maxBudget,
+      showToEditors,
+      showToClient,
+      autoReset,
+      sendAlerts,
+    } = req.body;
 
     const project = await prisma.project.create({
       data: {
@@ -36,6 +53,17 @@ router.post('/', async (req: Request, res: Response) => {
         description,
         techStack,
         link,
+        folder,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        notes,
+        baseRate,
+        minBudget,
+        maxBudget,
+        showToEditors,
+        showToClient,
+        autoReset,
+        sendAlerts,
       },
     });
 

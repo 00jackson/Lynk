@@ -134,7 +134,18 @@ exports.Prisma.ProjectScalarFieldEnum = {
   techStack: 'techStack',
   link: 'link',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  folder: 'folder',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  notes: 'notes',
+  baseRate: 'baseRate',
+  minBudget: 'minBudget',
+  maxBudget: 'maxBudget',
+  showToEditors: 'showToEditors',
+  showToClient: 'showToClient',
+  autoReset: 'autoReset',
+  sendAlerts: 'sendAlerts'
 };
 
 exports.Prisma.HelpRequestScalarFieldEnum = {

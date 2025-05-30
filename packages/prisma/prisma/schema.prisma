@@ -30,6 +30,19 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  // Extended project form fields
+  folder        String?
+  startDate     DateTime?
+  endDate       DateTime?
+  notes         String?
+  baseRate      String?
+  minBudget     String?
+  maxBudget     String?
+  showToEditors Boolean? @default(false)
+  showToClient  Boolean? @default(false)
+  autoReset     Boolean? @default(false)
+  sendAlerts    Boolean? @default(false)
+
   userProfile UserProfile @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 

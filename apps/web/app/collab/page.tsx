@@ -36,7 +36,7 @@ export default function CollaborationPage() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-[calc(100vh-64px)] flex flex-col">
       <header className="px-6 py-4 bg-gray-900 text-white flex justify-between items-center">
         <h1 className="text-xl font-bold">Live Collaboration Room</h1>
         <span className="text-sm text-gray-300">Room ID: {roomId}</span>
@@ -44,12 +44,12 @@ export default function CollaborationPage() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Code Editor */}
-        <div className="w-3/5 border-r bg-gray-50 p-2 overflow-auto">
+        <div className="w-4/6 border-r bg-gray-50 p-2 overflow-y-auto">
           <EditorPanel socket={socket} roomId={roomId} />
         </div>
 
         {/* Right Panel: Chat or Video */}
-        <div className="w-2/5 bg-white flex flex-col">
+        <div className="w-2/6 bg-white flex flex-col overflow-y-auto">
           <div className="flex justify-center space-x-2 p-2 border-b">
             <button
               onClick={() => setActiveTab('chat')}
@@ -65,7 +65,7 @@ export default function CollaborationPage() {
             </button>
           </div>
 
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-y-auto">
             {activeTab === 'chat' ? <ChatPanel /> : <VideoPanel />}
           </div>
         </div>

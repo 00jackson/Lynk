@@ -2215,6 +2215,17 @@ export namespace Prisma {
     link: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    folder: string | null
+    startDate: Date | null
+    endDate: Date | null
+    notes: string | null
+    baseRate: string | null
+    minBudget: string | null
+    maxBudget: string | null
+    showToEditors: boolean | null
+    showToClient: boolean | null
+    autoReset: boolean | null
+    sendAlerts: boolean | null
   }
 
   export type ProjectMaxAggregateOutputType = {
@@ -2225,6 +2236,17 @@ export namespace Prisma {
     link: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    folder: string | null
+    startDate: Date | null
+    endDate: Date | null
+    notes: string | null
+    baseRate: string | null
+    minBudget: string | null
+    maxBudget: string | null
+    showToEditors: boolean | null
+    showToClient: boolean | null
+    autoReset: boolean | null
+    sendAlerts: boolean | null
   }
 
   export type ProjectCountAggregateOutputType = {
@@ -2236,6 +2258,17 @@ export namespace Prisma {
     link: number
     createdAt: number
     updatedAt: number
+    folder: number
+    startDate: number
+    endDate: number
+    notes: number
+    baseRate: number
+    minBudget: number
+    maxBudget: number
+    showToEditors: number
+    showToClient: number
+    autoReset: number
+    sendAlerts: number
     _all: number
   }
 
@@ -2248,6 +2281,17 @@ export namespace Prisma {
     link?: true
     createdAt?: true
     updatedAt?: true
+    folder?: true
+    startDate?: true
+    endDate?: true
+    notes?: true
+    baseRate?: true
+    minBudget?: true
+    maxBudget?: true
+    showToEditors?: true
+    showToClient?: true
+    autoReset?: true
+    sendAlerts?: true
   }
 
   export type ProjectMaxAggregateInputType = {
@@ -2258,6 +2302,17 @@ export namespace Prisma {
     link?: true
     createdAt?: true
     updatedAt?: true
+    folder?: true
+    startDate?: true
+    endDate?: true
+    notes?: true
+    baseRate?: true
+    minBudget?: true
+    maxBudget?: true
+    showToEditors?: true
+    showToClient?: true
+    autoReset?: true
+    sendAlerts?: true
   }
 
   export type ProjectCountAggregateInputType = {
@@ -2269,6 +2324,17 @@ export namespace Prisma {
     link?: true
     createdAt?: true
     updatedAt?: true
+    folder?: true
+    startDate?: true
+    endDate?: true
+    notes?: true
+    baseRate?: true
+    minBudget?: true
+    maxBudget?: true
+    showToEditors?: true
+    showToClient?: true
+    autoReset?: true
+    sendAlerts?: true
     _all?: true
   }
 
@@ -2353,6 +2419,17 @@ export namespace Prisma {
     link: string | null
     createdAt: Date
     updatedAt: Date
+    folder: string | null
+    startDate: Date | null
+    endDate: Date | null
+    notes: string | null
+    baseRate: string | null
+    minBudget: string | null
+    maxBudget: string | null
+    showToEditors: boolean | null
+    showToClient: boolean | null
+    autoReset: boolean | null
+    sendAlerts: boolean | null
     _count: ProjectCountAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
@@ -2381,6 +2458,17 @@ export namespace Prisma {
     link?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    folder?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    notes?: boolean
+    baseRate?: boolean
+    minBudget?: boolean
+    maxBudget?: boolean
+    showToEditors?: boolean
+    showToClient?: boolean
+    autoReset?: boolean
+    sendAlerts?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -2393,6 +2481,17 @@ export namespace Prisma {
     link?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    folder?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    notes?: boolean
+    baseRate?: boolean
+    minBudget?: boolean
+    maxBudget?: boolean
+    showToEditors?: boolean
+    showToClient?: boolean
+    autoReset?: boolean
+    sendAlerts?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -2405,6 +2504,17 @@ export namespace Prisma {
     link?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    folder?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    notes?: boolean
+    baseRate?: boolean
+    minBudget?: boolean
+    maxBudget?: boolean
+    showToEditors?: boolean
+    showToClient?: boolean
+    autoReset?: boolean
+    sendAlerts?: boolean
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -2417,9 +2527,20 @@ export namespace Prisma {
     link?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    folder?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    notes?: boolean
+    baseRate?: boolean
+    minBudget?: boolean
+    maxBudget?: boolean
+    showToEditors?: boolean
+    showToClient?: boolean
+    autoReset?: boolean
+    sendAlerts?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "techStack" | "link" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "description" | "techStack" | "link" | "createdAt" | "updatedAt" | "folder" | "startDate" | "endDate" | "notes" | "baseRate" | "minBudget" | "maxBudget" | "showToEditors" | "showToClient" | "autoReset" | "sendAlerts", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
   }
@@ -2444,6 +2565,17 @@ export namespace Prisma {
       link: string | null
       createdAt: Date
       updatedAt: Date
+      folder: string | null
+      startDate: Date | null
+      endDate: Date | null
+      notes: string | null
+      baseRate: string | null
+      minBudget: string | null
+      maxBudget: string | null
+      showToEditors: boolean | null
+      showToClient: boolean | null
+      autoReset: boolean | null
+      sendAlerts: boolean | null
     }, ExtArgs["result"]["project"]>
     composites: {}
   }
@@ -2876,6 +3008,17 @@ export namespace Prisma {
     readonly link: FieldRef<"Project", 'String'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
+    readonly folder: FieldRef<"Project", 'String'>
+    readonly startDate: FieldRef<"Project", 'DateTime'>
+    readonly endDate: FieldRef<"Project", 'DateTime'>
+    readonly notes: FieldRef<"Project", 'String'>
+    readonly baseRate: FieldRef<"Project", 'String'>
+    readonly minBudget: FieldRef<"Project", 'String'>
+    readonly maxBudget: FieldRef<"Project", 'String'>
+    readonly showToEditors: FieldRef<"Project", 'Boolean'>
+    readonly showToClient: FieldRef<"Project", 'Boolean'>
+    readonly autoReset: FieldRef<"Project", 'Boolean'>
+    readonly sendAlerts: FieldRef<"Project", 'Boolean'>
   }
     
 
@@ -4395,7 +4538,18 @@ export namespace Prisma {
     techStack: 'techStack',
     link: 'link',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    folder: 'folder',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    notes: 'notes',
+    baseRate: 'baseRate',
+    minBudget: 'minBudget',
+    maxBudget: 'maxBudget',
+    showToEditors: 'showToEditors',
+    showToClient: 'showToClient',
+    autoReset: 'autoReset',
+    sendAlerts: 'sendAlerts'
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
@@ -4467,6 +4621,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -4562,6 +4723,17 @@ export namespace Prisma {
     link?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
+    folder?: StringNullableFilter<"Project"> | string | null
+    startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    notes?: StringNullableFilter<"Project"> | string | null
+    baseRate?: StringNullableFilter<"Project"> | string | null
+    minBudget?: StringNullableFilter<"Project"> | string | null
+    maxBudget?: StringNullableFilter<"Project"> | string | null
+    showToEditors?: BoolNullableFilter<"Project"> | boolean | null
+    showToClient?: BoolNullableFilter<"Project"> | boolean | null
+    autoReset?: BoolNullableFilter<"Project"> | boolean | null
+    sendAlerts?: BoolNullableFilter<"Project"> | boolean | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }
 
@@ -4574,6 +4746,17 @@ export namespace Prisma {
     link?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    folder?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    baseRate?: SortOrderInput | SortOrder
+    minBudget?: SortOrderInput | SortOrder
+    maxBudget?: SortOrderInput | SortOrder
+    showToEditors?: SortOrderInput | SortOrder
+    showToClient?: SortOrderInput | SortOrder
+    autoReset?: SortOrderInput | SortOrder
+    sendAlerts?: SortOrderInput | SortOrder
     userProfile?: UserProfileOrderByWithRelationInput
   }
 
@@ -4589,6 +4772,17 @@ export namespace Prisma {
     link?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
+    folder?: StringNullableFilter<"Project"> | string | null
+    startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    notes?: StringNullableFilter<"Project"> | string | null
+    baseRate?: StringNullableFilter<"Project"> | string | null
+    minBudget?: StringNullableFilter<"Project"> | string | null
+    maxBudget?: StringNullableFilter<"Project"> | string | null
+    showToEditors?: BoolNullableFilter<"Project"> | boolean | null
+    showToClient?: BoolNullableFilter<"Project"> | boolean | null
+    autoReset?: BoolNullableFilter<"Project"> | boolean | null
+    sendAlerts?: BoolNullableFilter<"Project"> | boolean | null
     userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
   }, "id">
 
@@ -4601,6 +4795,17 @@ export namespace Prisma {
     link?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    folder?: SortOrderInput | SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    baseRate?: SortOrderInput | SortOrder
+    minBudget?: SortOrderInput | SortOrder
+    maxBudget?: SortOrderInput | SortOrder
+    showToEditors?: SortOrderInput | SortOrder
+    showToClient?: SortOrderInput | SortOrder
+    autoReset?: SortOrderInput | SortOrder
+    sendAlerts?: SortOrderInput | SortOrder
     _count?: ProjectCountOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
     _min?: ProjectMinOrderByAggregateInput
@@ -4618,6 +4823,17 @@ export namespace Prisma {
     link?: StringNullableWithAggregatesFilter<"Project"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
+    folder?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    startDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
+    notes?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    baseRate?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    minBudget?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    maxBudget?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    showToEditors?: BoolNullableWithAggregatesFilter<"Project"> | boolean | null
+    showToClient?: BoolNullableWithAggregatesFilter<"Project"> | boolean | null
+    autoReset?: BoolNullableWithAggregatesFilter<"Project"> | boolean | null
+    sendAlerts?: BoolNullableWithAggregatesFilter<"Project"> | boolean | null
   }
 
   export type HelpRequestWhereInput = {
@@ -4759,6 +4975,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
     userProfile: UserProfileCreateNestedOneWithoutProjectsInput
   }
 
@@ -4771,6 +4998,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
   }
 
   export type ProjectUpdateInput = {
@@ -4781,6 +5019,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
     userProfile?: UserProfileUpdateOneRequiredWithoutProjectsNestedInput
   }
 
@@ -4793,6 +5042,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ProjectCreateManyInput = {
@@ -4804,6 +5064,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
   }
 
   export type ProjectUpdateManyMutationInput = {
@@ -4814,6 +5085,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ProjectUncheckedUpdateManyInput = {
@@ -4825,6 +5107,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type HelpRequestCreateInput = {
@@ -5015,6 +5308,22 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type UserProfileScalarRelationFilter = {
     is?: UserProfileWhereInput
     isNot?: UserProfileWhereInput
@@ -5034,6 +5343,17 @@ export namespace Prisma {
     link?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    folder?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    notes?: SortOrder
+    baseRate?: SortOrder
+    minBudget?: SortOrder
+    maxBudget?: SortOrder
+    showToEditors?: SortOrder
+    showToClient?: SortOrder
+    autoReset?: SortOrder
+    sendAlerts?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -5044,6 +5364,17 @@ export namespace Prisma {
     link?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    folder?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    notes?: SortOrder
+    baseRate?: SortOrder
+    minBudget?: SortOrder
+    maxBudget?: SortOrder
+    showToEditors?: SortOrder
+    showToClient?: SortOrder
+    autoReset?: SortOrder
+    sendAlerts?: SortOrder
   }
 
   export type ProjectMinOrderByAggregateInput = {
@@ -5054,6 +5385,17 @@ export namespace Prisma {
     link?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    folder?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    notes?: SortOrder
+    baseRate?: SortOrder
+    minBudget?: SortOrder
+    maxBudget?: SortOrder
+    showToEditors?: SortOrder
+    showToClient?: SortOrder
+    autoReset?: SortOrder
+    sendAlerts?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -5072,6 +5414,28 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type HelpRequestCountOrderByAggregateInput = {
@@ -5221,6 +5585,14 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type UserProfileUpdateOneRequiredWithoutProjectsNestedInput = {
     create?: XOR<UserProfileCreateWithoutProjectsInput, UserProfileUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: UserProfileCreateOrConnectWithoutProjectsInput
@@ -5324,6 +5696,22 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -5352,6 +5740,28 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
   export type ProjectCreateWithoutUserProfileInput = {
     id?: string
     title: string
@@ -5360,6 +5770,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
   }
 
   export type ProjectUncheckedCreateWithoutUserProfileInput = {
@@ -5370,6 +5791,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
   }
 
   export type ProjectCreateOrConnectWithoutUserProfileInput = {
@@ -5436,6 +5868,17 @@ export namespace Prisma {
     link?: StringNullableFilter<"Project"> | string | null
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
+    folder?: StringNullableFilter<"Project"> | string | null
+    startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    notes?: StringNullableFilter<"Project"> | string | null
+    baseRate?: StringNullableFilter<"Project"> | string | null
+    minBudget?: StringNullableFilter<"Project"> | string | null
+    maxBudget?: StringNullableFilter<"Project"> | string | null
+    showToEditors?: BoolNullableFilter<"Project"> | boolean | null
+    showToClient?: BoolNullableFilter<"Project"> | boolean | null
+    autoReset?: BoolNullableFilter<"Project"> | boolean | null
+    sendAlerts?: BoolNullableFilter<"Project"> | boolean | null
   }
 
   export type HelpRequestUpsertWithWhereUniqueWithoutUserProfileInput = {
@@ -5586,6 +6029,17 @@ export namespace Prisma {
     link?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    folder?: string | null
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    notes?: string | null
+    baseRate?: string | null
+    minBudget?: string | null
+    maxBudget?: string | null
+    showToEditors?: boolean | null
+    showToClient?: boolean | null
+    autoReset?: boolean | null
+    sendAlerts?: boolean | null
   }
 
   export type HelpRequestCreateManyUserProfileInput = {
@@ -5604,6 +6058,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ProjectUncheckedUpdateWithoutUserProfileInput = {
@@ -5614,6 +6079,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type ProjectUncheckedUpdateManyWithoutUserProfileInput = {
@@ -5624,6 +6100,17 @@ export namespace Prisma {
     link?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    folder?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    baseRate?: NullableStringFieldUpdateOperationsInput | string | null
+    minBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    maxBudget?: NullableStringFieldUpdateOperationsInput | string | null
+    showToEditors?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    showToClient?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    autoReset?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    sendAlerts?: NullableBoolFieldUpdateOperationsInput | boolean | null
   }
 
   export type HelpRequestUpdateWithoutUserProfileInput = {

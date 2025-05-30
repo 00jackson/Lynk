@@ -4,7 +4,7 @@ import Editor from '@monaco-editor/react';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Socket } from 'socket.io-client';
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/react';
-
+import * as monaco from 'monaco-editor';
 
 type Props = {
     socket: Socket;
@@ -23,6 +23,11 @@ export default function EditorPanel({ socket, roomId }: Props) {
 
     const [output, setOutput] = useState('$ Output will appear here after run...');
     const [isExecuting, setIsExecuting] = useState(false);
+
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+    const [remoteCursors, setRemoteCursors] = useState<Record<string, string>>({});
+    const decorationsRef = useRef<string[]>([]);
+
 
     const executeCode = useCallback(async () => {
         setIsExecuting(true);
@@ -66,6 +71,28 @@ export default function EditorPanel({ socket, roomId }: Props) {
             setActiveUsers(users);
         });
 
+        socket.on('cursor:update', ({ userId: otherId, position }) => {
+            if (editorRef.current && otherId !== userId.current) {
+                const range = new monaco.Range(
+                    position.lineNumber,
+                    position.column,
+                    position.lineNumber,
+                    position.column
+                );
+                const newDecorations = editorRef.current.deltaDecorations(
+                    decorationsRef.current,
+                    [{
+                        range,
+                        options: {
+                            className: 'remote-cursor',
+                            afterContentClassName: 'remote-cursor-label',
+                        },
+                    }]
+                );
+                decorationsRef.current = newDecorations;
+            }
+        });
+
         return () => {
             socket.emit('user:leave', userId.current);
         };
@@ -83,6 +110,17 @@ export default function EditorPanel({ socket, roomId }: Props) {
         activityTimeout.current = setTimeout(() => {
             setIsActive(false);
         }, 2000); // user inactive after 2s of no typing
+
+        const selection = editorRef.current?.getSelection();
+        if (selection) {
+            socket.emit('cursor:move', {
+                userId: userId.current,
+                position: {
+                    lineNumber: selection.positionLineNumber,
+                    column: selection.positionColumn,
+                },
+            });
+        }
     };
 
     return (
@@ -145,6 +183,9 @@ export default function EditorPanel({ socket, roomId }: Props) {
                 theme="vs-dark"
                 value={code}
                 onChange={handleEditorChange}
+                onMount={(editor) => {
+                    editorRef.current = editor;
+                }}
                 options={{
                     minimap: { enabled: false },
                     fontSize: 14,
@@ -156,6 +197,19 @@ export default function EditorPanel({ socket, roomId }: Props) {
             <div className="mt-4 bg-gray-500 text-green-400 font-mono text-sm p-4 rounded-lg shadow-inner border border-gray-700 w-full h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 whitespace-pre-wrap">
                 {output}
             </div>
+            <style jsx global>{`
+                .remote-cursor {
+                    border-left: 2px solid #10b981;
+                    margin-left: -1px;
+                    height: 100%;
+                }
+                .remote-cursor-label::after {
+                    content: '●';
+                    color: #10b981;
+                    font-size: 12px;
+                    margin-left: 4px;
+                }
+            `}</style>
         </div>
     );
 }
