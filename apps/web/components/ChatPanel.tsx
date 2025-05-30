@@ -13,14 +13,16 @@ export default function ChatPanel() {
   const [userScrolledUp, setUserScrolledUp] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
-  const roomId = 'abc123';
+  const roomId = useRef(sessionStorage.getItem('roomId') || 'abc123');
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:4001');
-    socketRef.current.emit('join:room', roomId);
+    socketRef.current = io('http://localhost:4001', {
+      transports: ['websocket']
+    });
+    socketRef.current.emit('join:room', { roomId: roomId.current, role: 'chat' });
 
     socketRef.current.on('chat:message', (payload: { roomId: string; message: { user: string; text: string; time: string } }) => {
-      if (payload.roomId === roomId) {
+      if (payload.roomId === roomId.current) {
         setMessages((prev) => [...prev, payload.message]);
       }
     });
@@ -28,7 +30,7 @@ export default function ChatPanel() {
     return () => {
       socketRef.current?.disconnect();
     };
-  }, [roomId]);
+  }, []);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -76,7 +78,7 @@ export default function ChatPanel() {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
     setMessages((prev) => [...prev, newMessage]);
-    socketRef.current?.emit('chat:message', { roomId, message: newMessage });
+    socketRef.current?.emit('chat:message', { roomId: roomId.current, message: newMessage });
     setInput('');
   };
 

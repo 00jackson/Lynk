@@ -19,7 +19,15 @@ export default function EditorPanel({ socket, roomId }: Props) {
     const activityTimeout = useRef<NodeJS.Timeout | null>(null);
 
     const [activeUsers, setActiveUsers] = useState<string[]>([]);
-    const userId = useRef(`user_${Math.random().toString(36).substr(2, 5)}`);
+    const storedUserId = typeof window !== 'undefined' ? sessionStorage.getItem('userId') : null;
+    const generatedUserId = `user_${Math.random().toString(36).substr(2, 5)}`;
+    const userId = useRef(storedUserId || generatedUserId);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && !storedUserId) {
+            sessionStorage.setItem('userId', userId.current);
+        }
+    }, []);
 
     const [output, setOutput] = useState('$ Output will appear here after run...');
     const [isExecuting, setIsExecuting] = useState(false);
@@ -65,7 +73,11 @@ export default function EditorPanel({ socket, roomId }: Props) {
 
 
     useEffect(() => {
-        socket.emit('user:join', userId.current);
+        socket.emit('join:room', {
+            roomId,
+            userId: userId.current,
+            role: 'editor',
+        });
 
         socket.on('users:active', (users: string[]) => {
             setActiveUsers(users);
@@ -94,9 +106,11 @@ export default function EditorPanel({ socket, roomId }: Props) {
         });
 
         return () => {
-            socket.emit('user:leave', userId.current);
+            socket.emit('leave:room', { roomId, userId: userId.current });
+            socket.off('users:active');
+            socket.off('cursor:update');
         };
-    }, [socket]);
+    }, [socket, roomId]);
 
     const handleEditorChange = (value: string | undefined) => {
         setCode(value || '');
@@ -106,7 +120,7 @@ export default function EditorPanel({ socket, roomId }: Props) {
         }
 
         setIsActive(true);
-        socket.emit('user:typing', userId.current);
+        socket.emit('user:typing', { roomId, userId: userId.current });
         activityTimeout.current = setTimeout(() => {
             setIsActive(false);
         }, 2000); // user inactive after 2s of no typing
@@ -114,6 +128,7 @@ export default function EditorPanel({ socket, roomId }: Props) {
         const selection = editorRef.current?.getSelection();
         if (selection) {
             socket.emit('cursor:move', {
+                roomId,
                 userId: userId.current,
                 position: {
                     lineNumber: selection.positionLineNumber,
