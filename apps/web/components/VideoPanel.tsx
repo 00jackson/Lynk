@@ -51,7 +51,7 @@ export default function VideoPanel() {
           }
         };
 
-        socket.emit('join-room', { roomId });
+        socket.emit('join-room', { roomId, userId });
 
         socket.on('joined-room', ({ isInitiator }: { isInitiator: boolean }) => {
           if (isInitiator && peerConnection.current?.signalingState === 'stable') {

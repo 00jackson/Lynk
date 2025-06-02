@@ -73,10 +73,18 @@ export default function EditorPanel({ socket, roomId }: Props) {
 
 
     useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const queryRoomId = queryParams.get('roomId');
+        const queryUserId = queryParams.get('userId');
+        const queryRole = queryParams.get('role') || 'editor';
+
+        const finalRoomId = queryRoomId || roomId;
+        const finalUserId = queryUserId || userId.current;
+
         socket.emit('join:room', {
-            roomId,
-            userId: userId.current,
-            role: 'editor',
+            roomId: finalRoomId,
+            userId: finalUserId,
+            role: queryRole,
         });
 
         socket.on('users:active', (users: string[]) => {
@@ -84,7 +92,7 @@ export default function EditorPanel({ socket, roomId }: Props) {
         });
 
         socket.on('cursor:update', ({ userId: otherId, position }) => {
-            if (editorRef.current && otherId !== userId.current) {
+            if (editorRef.current && otherId !== finalUserId) {
                 const range = new monaco.Range(
                     position.lineNumber,
                     position.column,
@@ -106,7 +114,7 @@ export default function EditorPanel({ socket, roomId }: Props) {
         });
 
         return () => {
-            socket.emit('leave:room', { roomId, userId: userId.current });
+            socket.emit('leave:room', { roomId: finalRoomId, userId: finalUserId });
             socket.off('users:active');
             socket.off('cursor:update');
         };

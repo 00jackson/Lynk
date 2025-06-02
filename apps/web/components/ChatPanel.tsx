@@ -4,22 +4,28 @@ import { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { nanoid } from 'nanoid/non-secure';
 import { IoIosArrowRoundDown } from 'react-icons/io';
+import { useSearchParams } from 'next/navigation';
 
 export default function ChatPanel() {
   const [messages, setMessages] = useState<{ user: string; text: string; time: string }[]>([]);
   const [input, setInput] = useState('');
   const socketRef = useRef<Socket | null>(null);
-  const userId = useRef(`User_${nanoid(5)}`);
+  const searchParams = useSearchParams();
+  const roomId = useRef(searchParams.get('roomId') || sessionStorage.getItem('roomId') || 'abc123');
+  const userId = useRef(searchParams.get('userId') || `User_${nanoid(5)}`);
   const [userScrolledUp, setUserScrolledUp] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
-  const roomId = useRef(sessionStorage.getItem('roomId') || 'abc123');
 
   useEffect(() => {
     socketRef.current = io('http://localhost:4001', {
-      transports: ['websocket']
+      transports: ['websocket'],
+      query: {
+        roomId: roomId.current,
+        userId: userId.current,
+        role: 'chat',
+      },
     });
-    socketRef.current.emit('join:room', { roomId: roomId.current, role: 'chat' });
 
     socketRef.current.on('chat:message', (payload: { roomId: string; message: { user: string; text: string; time: string } }) => {
       if (payload.roomId === roomId.current) {

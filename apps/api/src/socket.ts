@@ -14,22 +14,21 @@ export function setupSocket(server: HttpServer) {
 
   io.on('connection', (socket: Socket) => {
     const userId = socket.handshake.query.userId as string;
-    console.log('[Socket] A user connected:', socket.id);
+    console.log('[Socket] A user connected:', socket.id, 'UserID:', userId);
 
-    socket.on('cursor:move', ({ roomId, userId, position }) => {
+    socket.on('cursor:move', ({ roomId, position }) => {
       socket.to(roomId).emit('cursor:update', { userId, position });
     });
 
-    socket.on('join:room', ({ roomId, userId: bodyUserId }) => {
-      const resolvedUserId = bodyUserId || userId;
+    socket.on('join:room', ({ roomId }) => {
       socket.join(roomId);
-      socketToRoom[socket.id] = { roomId, userId: resolvedUserId };
+      socketToRoom[socket.id] = { roomId, userId };
 
       if (!rooms[roomId]) rooms[roomId] = [];
-      if (!rooms[roomId].includes(resolvedUserId)) rooms[roomId].push(resolvedUserId);
+      if (!rooms[roomId].includes(userId)) rooms[roomId].push(userId);
 
       io.to(roomId).emit('users:active', rooms[roomId]);
-      console.log(`[Room ${roomId}] ${resolvedUserId} joined`);
+      console.log(`[Room ${roomId}] ${userId} joined`);
 
       const socketsInRoom = io.sockets.adapter.rooms.get(roomId);
       const numSockets = socketsInRoom ? socketsInRoom.size : 0;
@@ -38,7 +37,7 @@ export function setupSocket(server: HttpServer) {
       }
     });
 
-    socket.on('leave:room', ({ roomId, userId }) => {
+    socket.on('leave:room', ({ roomId }) => {
       socket.leave(roomId);
       delete socketToRoom[socket.id];
 
@@ -50,26 +49,26 @@ export function setupSocket(server: HttpServer) {
     });
 
     socket.on('chat:message', ({ roomId, message }) => {
-      console.log(`[Chat] Message to ${roomId}:`, message);
-      socket.to(roomId).emit('chat:message', message);
+      console.log(`[Chat] Message to ${roomId} from ${userId}:`, message);
+      io.to(roomId).emit('chat:message', { message, userId });
     });
 
-    socket.on('webrtc:offer', ({ roomId, offer, from }) => {
-      socket.to(roomId).emit('webrtc:offer', { offer, from });
+    socket.on('webrtc:offer', ({ roomId, offer }) => {
+      socket.to(roomId).emit('webrtc:offer', { offer, from: userId });
     });
 
-    socket.on('webrtc:answer', ({ roomId, answer, from }) => {
-      socket.to(roomId).emit('webrtc:answer', { answer, from });
+    socket.on('webrtc:answer', ({ roomId, answer }) => {
+      socket.to(roomId).emit('webrtc:answer', { answer, from: userId });
     });
 
-    socket.on('webrtc:ice-candidate', ({ roomId, candidate, from }) => {
-      socket.to(roomId).emit('webrtc:ice-candidate', { candidate, from });
+    socket.on('webrtc:ice-candidate', ({ roomId, candidate }) => {
+      socket.to(roomId).emit('webrtc:ice-candidate', { candidate, from: userId });
     });
 
     socket.on('disconnect', () => {
       const mapping = socketToRoom[socket.id];
       if (mapping) {
-        const { roomId, userId } = mapping;
+        const { roomId } = mapping;
         if (rooms[roomId]) {
           rooms[roomId] = rooms[roomId].filter(id => id !== userId);
           io.to(roomId).emit('users:active', rooms[roomId]);
