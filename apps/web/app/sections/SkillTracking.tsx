@@ -10,7 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { FaCrown, FaUserCircle } from "react-icons/fa";
+import { FaCrown, FaFire, FaChartLine, FaUserFriends } from "react-icons/fa";
+import { IoMdRocket } from "react-icons/io";
 
 ChartJS.register(
   RadialLinearScale,
@@ -21,10 +22,110 @@ ChartJS.register(
   Legend
 );
 
+// Define types for our data
+type StreakDay = {
+  day: string;
+  active: boolean;
+};
+
+type LeaderboardUser = {
+  rank: number;
+  name: string;
+  xp: number;
+  you: boolean;
+};
+
+// Radar chart data configuration
+const skillData = {
+  labels: [
+    "Frontend",
+    "Backend",
+    "UI/UX",
+    "DevOps",
+    "AI",
+    "Communication",
+    "Problem Solving",
+    "Teamwork",
+  ],
+  datasets: [
+    {
+      label: "Skill Level",
+      data: [80, 65, 70, 50, 40, 85, 75, 90],
+      backgroundColor: "rgba(99, 102, 241, 0.2)",
+      borderColor: "#6366F1",
+      borderWidth: 2,
+      pointBackgroundColor: "#6366F1",
+      pointBorderColor: "#fff",
+      pointHoverRadius: 6,
+    },
+  ],
+};
+
+// Radar chart options
+// Radar chart options
+const radarOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    r: {
+      angleLines: {
+        display: true,
+        color: "rgba(200, 200, 200, 0.3)"
+      },
+      suggestedMin: 0,
+      suggestedMax: 100,
+      ticks: {
+        display: false,
+        stepSize: 20
+      },
+      grid: {
+        color: "rgba(200, 200, 200, 0.3)"
+      },
+      pointLabels: {
+        font: {
+          size: 11,
+          family: "'Inter', sans-serif",
+        },
+        color: "#4B5563"
+      },
+    },
+  },
+  plugins: {
+    legend: {
+      display: false,
+    },
+    tooltip: {
+      backgroundColor: "#1E293B",
+      titleFont: {
+        size: 12,
+        weight: "bold" as const, // <-- Fix here
+      },
+      bodyFont: {
+        size: 12
+      },
+      padding: 10,
+      cornerRadius: 8,
+      displayColors: false,
+      callbacks: {
+        label: (context: any) => {
+          return `${context.label}: ${context.raw}%`;
+        }
+      }
+    }
+  },
+  elements: {
+    line: {
+      tension: 0.1
+    }
+  }
+};
+
 export default function SkillTrackingSection() {
+  // ... (keep your existing state and data)
   const [streakType, setStreakType] = useState<"daily" | "weekly">("daily");
 
-  const dailyStreak = [
+  // Streak data
+  const streakDays: StreakDay[] = [
     { day: "S", active: true },
     { day: "M", active: true },
     { day: "T", active: true },
@@ -34,207 +135,210 @@ export default function SkillTrackingSection() {
     { day: "S", active: false },
   ];
 
-  const weeklyStreak = [
-    { week: "W1", active: true },
-    { week: "W2", active: true },
-    { week: "W3", active: false },
-    { week: "W4", active: false },
-  ];
-
-  const streakData = streakType === "daily" ? dailyStreak : weeklyStreak;
-
-  const skillData = {
-    labels: [
-      "Frontend",
-      "Backend",
-      "UI/UX",
-      "DevOps",
-      "AI",
-      "Communication",
-      "Problem Solving",
-      "Teamwork",
-    ],
-    datasets: [
-      {
-        label: "Skill Level",
-        data: [80, 65, 70, 50, 40, 85, 75, 90],
-        backgroundColor: "rgba(59, 130, 246, 0.2)",
-        borderColor: "#3B82F6",
-        borderWidth: 2,
-        pointBackgroundColor: "#3B82F6",
-      },
-    ],
-  };
-
-  const xp = 270;
-  const level = 3;
-  const xpGoal = 400;
-
-  const leaderboard = [
-    { name: "Xyaa", xp: 320 },
-    { name: "Bryan", xp: 290 },
-    { name: "Dan", xp: 250 },
-    { name: "You", xp: 200 },
-    { name: "Micheal", xp: 130 },
+  // Leaderboard data
+  const leaderboardData: LeaderboardUser[] = [
+    { rank: 1, name: 'Alex', xp: 420, you: false },
+    { rank: 2, name: 'Jamie', xp: 390, you: false },
+    { rank: 3, name: 'You', xp: 270, you: true },
+    { rank: 4, name: 'Taylor', xp: 210, you: false }
   ];
 
   return (
-    <section className="py-24 px-6 md:px-20 bg-gray-50 text-gray-800">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <section className="py-12 px-4 md:px-8 bg-gray-50 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03]"></div>
+
+      <div className="max-w-6xl mx-auto space-y-12 relative z-10">
         {/* Header */}
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-4">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-bold text-blue-600"
+            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
-            Track Your Growth, One Skill at a Time
+            Your Learning Dashboard
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 max-w-xl mx-auto"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg"
           >
-            Your journey, visualized beautifully — from skill stats to progress streaks.
+            Visualized progress in a clean, distraction-free interface
           </motion.p>
         </div>
 
-        {/* Main Content */}
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          {/* Left: Radar Chart */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-gray-100 backdrop-blur-md rounded-xl border border-gray-200 p-6 shadow-lg"
-          >
-            <h4 className="text-lg font-semibold mb-4">Skill Radar</h4>
-            <Radar
-              data={skillData}
-              options={{
-                responsive: true,
-                scales: {
-                  r: {
-                    angleLines: { display: false },
-                    suggestedMin: 0,
-                    suggestedMax: 100,
-                    ticks: { display: false },
-                    pointLabels: {
-                      font: {
-                        size: 12,
-                      },
-                    },
-                  },
-                },
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              }}
-            />
-          </motion.div>
-
-          {/* Right: XP Tracker, Streak Tracker, Leaderboard */}
-          <div className="space-y-6">
-            {/* XP Tracker */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="bg-gray-100 backdrop-blur-md rounded-xl border border-gray-200 p-6 shadow-lg"
-            >
-              <h4 className="text-lg font-semibold mb-2">XP Progress</h4>
-              <div className="relative w-full bg-blue-100 h-4 rounded-full overflow-hidden">
-                <motion.div
-                  className="absolute top-0 left-0 h-4 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${(xp / xpGoal) * 100}%` }}
-                  transition={{ duration: 1 }}
-                />
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Skill Radar - Left Panel - Made more compact */}
+          <div className="lg:col-span-2 bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                <FaChartLine className="text-lg" />
               </div>
-              <p className="text-sm mt-2 text-gray-600">
-                Level {level} · {xp} XP / {xpGoal} XP
-              </p>
-            </motion.div>
-
-            {/* Streak Tracker */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="bg-gray-50 backdrop-blur-md rounded-xl border border-gray-200 p-6 shadow-lg"
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h4 className="text-lg font-semibold">Streak Tracker</h4>
-                <div className="flex border border-gray-200 rounded-md overflow-hidden text-sm">
-                  {["daily", "weekly"].map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => setStreakType(type as "daily" | "weekly")}
-                      className={`px-4 py-1 ${
-                        streakType === type
-                          ? "bg-blue-600 text-white"
-                          : "bg-white text-gray-800"
-                      } transition`}
-                    >
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </button>
-                  ))}
+              <div>
+                <h3 className="font-semibold text-base md:text-lg">Skill Assessment</h3>
+                <p className="text-xs md:text-sm text-gray-500">Updated 2 hours ago</p>
+              </div>
+            </div>
+            <div className="h-[300px] md:h-[350px] relative"> {/* Added relative positioning */}
+              <div className="absolute inset-0 flex items-center justify-center"> {/* Centering wrapper */}
+                <div className="w-full h-full max-w-[900px] mt-10"> {/* Constrained maximum size */}
+                  <Radar
+                    data={skillData}
+                    options={{
+                      ...radarOptions,
+                      plugins: {
+                        ...radarOptions.plugins,
+                        tooltip: {
+                          ...radarOptions.plugins.tooltip,
+                          bodyFont: {
+                            size: 13
+                          },
+                          titleFont: {
+                            size: 14,
+                            weight: "bold" as const
+                          }
+                        }
+                      },
+                      // Increase the size of radar elements
+                      elements: {
+                        point: {
+                          radius: 4, // Increased from default 3
+                          hoverRadius: 6
+                        },
+                        line: {
+                          borderWidth: 2.5, // Increased from default 2
+                          tension: 0.1
+                        }
+                      },
+                      // Adjust scale to use more space
+                      scales: {
+                        r: {
+                          ...radarOptions.scales.r,
+                          pointLabels: {
+                            font: {
+                              size: 12, // Increased from 11
+                              family: "'Inter', sans-serif",
+                            },
+                            color: "#4B5563"
+                          },
+                          ticks: {
+                            display: false,
+                            stepSize: 20,
+                            backdropColor: 'transparent' // Remove tick background
+                          }
+                        }
+                      }
+                    }}
+                  />
                 </div>
               </div>
-              <div className="flex justify-center gap-4">
-                {streakData.map((item, idx) => (
-                  <div
-                    key={idx}
-                    title={
-                      "day" in item
-                        ? `Day: ${item.day}`
-                        : `Week: ${item.week}`
-                    }
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-normal ${
-                      item.active
-                        ? "bg-blue-500"
-                        : "bg-gray-300 text-white"
-                    } shadow-sm`}
-                  >
-                    {"day" in item ? item.day : item.week}
+            </div>
+          </div>
+
+          {/* Right Sidebar - Made more compact */}
+          <div className="space-y-6">
+            {/* Streak Tracker */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-xl border border-blue-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
+                  <FaFire className="text-lg" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-base md:text-lg">Learning Streak</h3>
+                  <p className="text-xs md:text-sm text-gray-500">5 days active</p>
+                </div>
+              </div>
+              <div className="flex justify-center gap-3">
+                {streakDays.map((day, i) => (
+                  <div key={i} className="flex flex-col items-center">
+                    <div className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center 
+                      ${day.active ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-400'} text-sm`}>
+                      {day.day}
+                    </div>
+                    <span className="text-[10px] md:text-xs mt-1 text-gray-500">Day {i + 1}</span>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
+
+            {/* XP Progress */}
+            <div className="bg-white p-5 rounded-xl border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
+                  <IoMdRocket className="text-lg" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-base md:text-lg">Level Progress</h3>
+                  <p className="text-xs md:text-sm text-gray-500">Level 3 - 270/400 XP</p>
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full"
+                    style={{ width: '67%' }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-[10px] md:text-xs text-gray-500 mt-1">
+                  <span>0 XP</span>
+                  <span>400 XP</span>
+                </div>
+              </div>
+            </div>
 
             {/* Leaderboard */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              className="bg-gray-50 backdrop-blur-md rounded-xl border border-gray-200 p-6 shadow-lg"
-            >
-              <h4 className="text-lg font-semibold text-center mb-6">Leaderboard</h4>
-              <div className="divide-y">
-                {leaderboard.map((user, idx) => (
+            <div className="bg-white p-5 rounded-xl border border-gray-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2 bg-green-100 rounded-lg text-green-600">
+                  <FaUserFriends className="text-lg" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-base md:text-lg">Community Rank</h3>
+                  <p className="text-xs md:text-sm text-gray-500">Top 20% of learners</p>
+                </div>
+              </div>
+              <div className="mt-3 space-y-2">
+                {leaderboardData.map((user) => (
                   <div
-                    key={idx}
-                    className={`flex justify-between items-center py-3 px-2 ${
-                      user.name === "You" ? "bg-blue-100 rounded-lg" : ""
-                    }`}
+                    key={user.rank}
+                    className={`flex items-center justify-between p-2 rounded-lg text-sm
+                      ${user.you ? 'bg-blue-50' : ''}`}
                   >
-                    <span className="font-medium flex items-center gap-2">
-                      {idx + 1}. {user.name}
-                      {idx === 0 && <FaCrown className="text-yellow-500" />}
-                      {idx === 1 && <FaCrown className="text-gray-400" />}
-                      {idx === 2 && <FaCrown className="text-yellow-700" />}
-                    </span>
-                    <span className="text-gray-500 text-sm">{user.xp} XP</span>
+                    <div className="flex items-center gap-2">
+                      <span className={`font-medium ${user.rank <= 3 ? 'text-blue-600' : 'text-gray-600'}`}>
+                        {user.rank}.
+                      </span>
+                      <span>{user.name}</span>
+                      {user.rank === 1 && <FaCrown className="text-yellow-400 text-sm" />}
+                    </div>
+                    <span className="text-xs md:text-sm font-medium">{user.xp} XP</span>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
+
+        {/* Premium Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl p-6 md:p-8 text-white shadow-lg"
+        >
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div>
+              <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2">Unlock Advanced Analytics</h3>
+              <p className="text-blue-100 text-sm md:text-base max-w-lg">
+                Get personalized recommendations and detailed progress reports with Premium.
+              </p>
+            </div>
+            <button className="mt-3 md:mt-0 px-5 py-1.5 md:px-6 md:py-2 bg-white text-indigo-600 rounded-lg font-medium hover:bg-gray-100 transition text-sm md:text-base">
+              Upgrade Now
+            </button>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

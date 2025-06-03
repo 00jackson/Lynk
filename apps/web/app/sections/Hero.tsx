@@ -1,85 +1,351 @@
 'use client';
-import { motion } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, animate, AnimationPlaybackControls } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useInView } from "framer-motion";
-// import FeatureOverview from "./sections/FeatureOverview";
 
 export default function Hero() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  // Enhanced dynamic gradient with individual color control
+  const color1 = useMotionValue('#3b82f6');
+  const color2 = useMotionValue('#6366f1');
+  const color3 = useMotionValue('#ec4899');
+  const textGradient = useMotionTemplate`linear-gradient(45deg, ${color1}, ${color2}, ${color3})`;
+
+  // Animate the text gradient with complex sequences
+  useEffect(() => {
+    if (!isInView) return;
+    
+    const sequences = [
+      { colors: ['#3b82f6', '#6366f1', '#ec4899'], duration: 8 },
+      { colors: ['#60a5fa', '#a855f7', '#f43f5e'], duration: 6 },
+      { colors: ['#2563eb', '#7c3aed', '#db2777'], duration: 7 },
+      { colors: ['#1d4ed8', '#6d28d9', '#be185d'], duration: 5 }
+    ];
+    
+    let sequenceIndex = 0;
+    const animations: AnimationPlaybackControls[] = [];
+
+    const cycleGradient = () => {
+      // Stop any existing animations
+      animations.forEach(anim => anim.stop());
+      animations.length = 0;
+      
+      const currentSequence = sequences[sequenceIndex % sequences.length];
+      
+      // Animate each color separately with different durations
+      animations.push(
+        animate(color1, currentSequence.colors[0], {
+          duration: currentSequence.duration * 0.8,
+          ease: "easeInOut"
+        }),
+        animate(color2, currentSequence.colors[1], {
+          duration: currentSequence.duration,
+          ease: "easeInOut"
+        }),
+        animate(color3, currentSequence.colors[2], {
+          duration: currentSequence.duration * 1.2,
+          ease: "easeInOut"
+        })
+      );
+
+      sequenceIndex++;
+      
+      // Schedule next cycle
+      const timeout = setTimeout(cycleGradient, currentSequence.duration * 1500);
+      return () => clearTimeout(timeout);
+    };
+
+    cycleGradient();
+
+    return () => {
+      animations.forEach(anim => anim.stop());
+    };
+  }, [isInView, color1, color2, color3]);
+
+  // Animation configs
+  const container = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.15,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const item = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { 
+        type: "spring", 
+        damping: 12, 
+        stiffness: 100 
+      }
+    }
+  };
+
+  const floating = {
+    float: {
+      y: ["0%", "-5%", "0%"],
+      transition: {
+        duration: 6,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  // Parallax mouse effect
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    mouseX.set((clientX - left - width/2) / 25);
+    mouseY.set((clientY - top - height/2) / 25);
+  };
+
   return (
     <main
       ref={ref}
-      className={`min-h-screen bg-gradient-to-br from-white to-blue-50 text-gray-900 flex flex-col items-center justify-center px-6 md:px-20 py-20 relative gap-24 transition-opacity duration-1000 ${
+      onMouseMove={handleMouseMove}
+      className={`min-h-screen bg-gradient-to-br from-white via-blue-50 to-indigo-50 text-gray-900 flex flex-col items-center justify-center px-6 md:px-20 py-20 relative overflow-hidden transition-opacity duration-1000 ${
         isInView ? 'opacity-100' : 'opacity-0'
       }`}
     >
-      <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+      {/* Animated gradient mesh background */}
+      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none overflow-hidden">
+        <motion.div 
+          className="absolute inset-0 bg-mesh-pattern"
+          style={{
+            x: mouseX,
+            y: mouseY
+          }}
+        />
+        <style jsx>{`
+          .bg-mesh-pattern {
+            background-image: 
+              radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 30%),
+              radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 25%),
+              radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 25%);
+            background-size: 200% 200%;
+          }
+        `}</style>
+      </div>
+
+      {/* Floating particles */}
+      {[...Array(8)].map((_, i) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-xl text-center md:text-left space-y-6 px-4"
-        >
-          <h1 className="text-5xl font-extrabold leading-tight text-blue-600">
-            Build smarter. Connect faster.
-          </h1>
-          <p className="text-lg text-gray-700">
-            Discover how creators and teams use Lynk to accelerate product workflows, connect ideas, and ship faster with purpose.
-          </p>
-          <div className="flex justify-center md:justify-start gap-4">
-            <button className="px-6 py-3 bg-blue-600 text-white rounded-md text-base hover:bg-blue-700 transition">Start Building</button>
-            <button className="px-6 py-3 border border-blue-600 text-blue-600 rounded-md text-base hover:border-blue-500 hover:text-blue-600 transition">Learn More</button>
-          </div>
-        </motion.div>
-        <div className="relative px-4">
-          <motion.div
-            className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full z-0"
-            initial={{ x: -50, y: -50, opacity: 0 }}
-            animate={{ x: 0, y: 0, opacity: 1 }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
-          />
-          <motion.div
-            className="absolute -bottom-10 -right-10 w-72 h-72 bg-blue-200 rounded-full z-0"
-            initial={{ x: 50, y: 50, opacity: 0 }}
-            animate={{ x: 0, y: 0, opacity: 1 }}
-            transition={{ duration: 1.4, ease: 'easeOut' }}
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative z-10"
+          key={i}
+          className={`absolute rounded-full ${i % 3 === 0 ? 'bg-blue-400' : i % 2 === 0 ? 'bg-indigo-400' : 'bg-pink-400'} opacity-30`}
+          style={{
+            width: Math.random() * 10 + 5,
+            height: Math.random() * 10 + 5,
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, (Math.random() - 0.5) * 100],
+            x: [0, (Math.random() - 0.5) * 50],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: Math.random() * 10 + 10,
+            repeat: Infinity,
+            repeatType: 'reverse',
+            ease: 'easeInOut',
+            delay: Math.random() * 5
+          }}
+        />
+      ))}
+
+      {/* Main content container */}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12 w-full max-w-6xl"
+      >
+        {/* Text content */}
+        <motion.div className="max-w-2xl text-center md:text-left space-y-8 px-4">
+          <motion.h1 
+            variants={item}
+            className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
+            style={{ 
+              backgroundImage: textGradient,
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              color: 'transparent'
+            }}
           >
-            <Image
-              src="/assets/hero.jpg"
-              alt="Hero Illustration"
-              width={400}
-              height={400}
-              className="w-full h-auto rounded-full aspect-square object-cover relative z-10"
-            />
+            Build smarter.<br className="hidden md:block" /> Connect <span className="whitespace-nowrap">faster.</span>
+          </motion.h1>
+          
+          <motion.p 
+            variants={item}
+            className="text-lg md:text-xl text-gray-500 leading-relaxed"
+          >
+            Discover how creators and teams use <span className="font-semibold text-blue-600">Lynk</span> to accelerate product workflows, connect ideas, and ship faster with purpose.
+          </motion.p>
+          
+          <motion.div 
+            variants={container}
+            className="flex flex-col sm:flex-row justify-center md:justify-start gap-4"
+          >
+            <motion.button 
+              variants={item}
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.4)'
+              }}
+              whileTap={{ 
+                scale: 0.95,
+                boxShadow: '0 5px 15px -5px rgba(59, 130, 246, 0.4)'
+              }}
+              className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-lg font-medium transition-all relative overflow-hidden group"
+            >
+              <span className="relative z-10">Start Building</span>
+              <motion.span 
+                className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                initial={{ opacity: 0 }}
+              />
+            </motion.button>
+            
+            <motion.button 
+              variants={item}
+              whileHover={{ 
+                scale: 1.05,
+                backgroundColor: 'rgba(239, 246, 255, 1)'
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-3.5 border-2 border-blue-600 text-blue-600 rounded-xl text-lg font-medium transition-all hover:shadow-md"
+            >
+              Learn More
+            </motion.button>
           </motion.div>
-        </div>
-      </div>
-      <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
-        <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-          <circle cx="512" cy="512" r="400" fill="url(#grad1)" />
-          <defs>
-            <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-              <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-            </radialGradient>
-          </defs>
-        </svg>
-      </div>
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/3 left-0 w-1 h-1/2 bg-gradient-to-b from-blue-600 to-transparent opacity-30"></div>
-        <div className="absolute bottom-1/4 right-0 w-1 h-1/2 bg-gradient-to-t from-blue-600 to-transparent opacity-30"></div>
-        <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-blue-600 to-transparent opacity-20"></div>
-        <div className="absolute bottom-0 right-1/4 w-px h-full bg-gradient-to-t from-blue-600 to-transparent opacity-20"></div>
-      </div>
-      {/* <FeatureOverview /> */}
+        </motion.div>
+
+        {/* Image container */}
+        <motion.div 
+          className="relative px-4"
+          variants={container}
+        >
+          {/* Decorative shapes */}
+          <motion.div
+            className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-3xl z-0 blur-xl"
+            variants={item}
+            custom={0}
+            animate={{
+              rotate: [0, 5, 0],
+              borderRadius: ["20%", "25%", "20%"]
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut"
+            }}
+          />
+          
+          <motion.div
+            className="absolute -bottom-10 -right-10 w-72 h-72 bg-indigo-100 rounded-[40%] z-0 blur-xl"
+            variants={item}
+            custom={1}
+            animate={{
+              rotate: [0, -8, 0],
+              borderRadius: ["40%", "35%", "40%"]
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut",
+              delay: 2
+            }}
+          />
+          
+          {/* Main image with 3D tilt effect */}
+          <motion.div
+            variants={item}
+            custom={2}
+            className="relative z-10"
+            style={{
+              rotateX: mouseY,
+              rotateY: mouseX,
+            }}
+            transition={{ type: "spring", damping: 20, stiffness: 100 }}
+          >
+            <motion.div
+              variants={floating}
+              animate="float"
+              className="rounded-3xl overflow-hidden shadow-2xl border-8 border-white/90"
+            >
+              <Image
+                src="/assets/hero.jpg"
+                alt="Hero Illustration"
+                width={600}
+                height={600}
+                className="w-full h-auto aspect-square object-cover relative z-10"
+                priority
+              />
+            </motion.div>
+          </motion.div>
+          
+          {/* Glowing highlight */}
+          <motion.div 
+            className="absolute top-1/4 -right-5 w-24 h-24 bg-blue-400 rounded-full z-0 blur-3xl opacity-20"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.3, 0.2]
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </motion.div>
+      </motion.div>
+
+      {/* Animated scroll indicator */}
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
+        variants={item}
+      >
+        <div className="text-sm text-blue-600 font-medium mb-2">Scroll to explore</div>
+        <motion.div
+          className="w-8 h-12 border-2 border-blue-600 rounded-full flex justify-center p-1"
+          animate={{
+            borderColor: ['rgba(59, 130, 246, 1)', 'rgba(99, 102, 241, 1)', 'rgba(59, 130, 246, 1)']
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <motion.div 
+            className="w-1 h-3 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full mt-1"
+            animate={{
+              y: [0, 8, 0],
+              opacity: [0.6, 1, 0.6]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </motion.div>
+      </motion.div>
     </main>
   );
 }
