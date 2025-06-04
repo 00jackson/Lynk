@@ -1,330 +1,329 @@
 'use client';
-import { motion, useMotionTemplate, useMotionValue, animate, AnimationPlaybackControls } from "framer-motion";
+import { motion, useMotionTemplate, useMotionValue, animate } from "framer-motion";
 import Image from "next/image";
-import { useRef, useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useInView } from "framer-motion";
 
 export default function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
+  const [isMounted, setIsMounted] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "0px" });
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
-  // Enhanced dynamic gradient with individual color control
-  const color1 = useMotionValue('#3b82f6');
-  const color2 = useMotionValue('#6366f1');
-  const color3 = useMotionValue('#ec4899');
-  const textGradient = useMotionTemplate`linear-gradient(45deg, ${color1}, ${color2}, ${color3})`;
+  // Advanced gradient animation with color morphing
+  const gradientBackground = useMotionTemplate`radial-gradient(at ${mouseX}px ${mouseY}px, var(--color-1) 0%, var(--color-2) 30%, var(--color-3) 60%, transparent 80%)`;
+  
+  // 3D floating cards state
+  const [floatingCards, setFloatingCards] = useState([
+    { id: 1, x: 0, y: 0, rotation: 0, scale: 1, zIndex: 1 },
+    { id: 2, x: 0, y: 0, rotation: 0, scale: 1, zIndex: 2 },
+    { id: 3, x: 0, y: 0, rotation: 0, scale: 1, zIndex: 3 }
+  ]);
 
-  // Animate the text gradient with complex sequences
+  // Initialize component
+  useEffect(() => {
+    setIsMounted(true);
+    randomizeFloatingCards();
+  }, []);
+
+  // Dynamic color animation
   useEffect(() => {
     if (!isInView) return;
     
-    const sequences = [
-      { colors: ['#3b82f6', '#6366f1', '#ec4899'], duration: 8 },
-      { colors: ['#60a5fa', '#a855f7', '#f43f5e'], duration: 6 },
-      { colors: ['#2563eb', '#7c3aed', '#db2777'], duration: 7 },
-      { colors: ['#1d4ed8', '#6d28d9', '#be185d'], duration: 5 }
+    const colors = [
+      { color1: '#6366f1', color2: '#8b5cf6', color3: '#ec4899' },
+      { color1: '#3b82f6', color2: '#06b6d4', color3: '#10b981' },
+      { color1: '#f59e0b', color2: '#ef4444', color3: '#8b5cf6' }
     ];
     
-    let sequenceIndex = 0;
-    const animations: AnimationPlaybackControls[] = [];
-
-    const cycleGradient = () => {
-      // Stop any existing animations
-      animations.forEach(anim => anim.stop());
-      animations.length = 0;
+    let currentIndex = 0;
+    
+    const animateColors = () => {
+      const nextIndex = (currentIndex + 1) % colors.length;
+      const nextColors = colors[nextIndex];
       
-      const currentSequence = sequences[sequenceIndex % sequences.length];
+      animate(document.documentElement, {
+        '--color-1': nextColors.color1,
+        '--color-2': nextColors.color2,
+        '--color-3': nextColors.color3,
+      }, { duration: 8, ease: "easeInOut" });
       
-      // Animate each color separately with different durations
-      animations.push(
-        animate(color1, currentSequence.colors[0], {
-          duration: currentSequence.duration * 0.8,
-          ease: "easeInOut"
-        }),
-        animate(color2, currentSequence.colors[1], {
-          duration: currentSequence.duration,
-          ease: "easeInOut"
-        }),
-        animate(color3, currentSequence.colors[2], {
-          duration: currentSequence.duration * 1.2,
-          ease: "easeInOut"
-        })
-      );
-
-      sequenceIndex++;
-      
-      // Schedule next cycle
-      const timeout = setTimeout(cycleGradient, currentSequence.duration * 1500);
-      return () => clearTimeout(timeout);
+      currentIndex = nextIndex;
+      setTimeout(animateColors, 8000);
     };
+    
+    animateColors();
+  }, [isInView]);
 
-    cycleGradient();
-
-    return () => {
-      animations.forEach(anim => anim.stop());
-    };
-  }, [isInView, color1, color2, color3]);
-
-  // Animation configs
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: "beforeChildren",
-        staggerChildren: 0.15,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const item = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { 
-        type: "spring", 
-        damping: 12, 
-        stiffness: 100 
-      }
-    }
-  };
-
-  const floating = {
-    float: {
-      y: ["0%", "-5%", "0%"],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+  // Floating cards animation
+  const randomizeFloatingCards = () => {
+    setFloatingCards(prev => prev.map(card => ({
+      ...card,
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50,
+      rotation: Math.random() * 20 - 10,
+      scale: 0.9 + Math.random() * 0.2
+    })));
+    
+    setTimeout(randomizeFloatingCards, 8000);
   };
 
   // Parallax mouse effect
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
     const { clientX, clientY } = e;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    mouseX.set((clientX - left - width/2) / 25);
-    mouseY.set((clientY - top - height/2) / 25);
+    const { width, height } = e.currentTarget.getBoundingClientRect();
+    mouseX.set((clientX / width) * 100);
+    mouseY.set((clientY / height) * 100);
   };
 
   return (
     <main
-      ref={ref}
       onMouseMove={handleMouseMove}
-      className={`min-h-screen bg-gradient-to-br from-white via-blue-50 to-indigo-50 text-gray-900 flex flex-col items-center justify-center px-6 md:px-20 py-20 relative overflow-hidden transition-opacity duration-1000 ${
-        isInView ? 'opacity-100' : 'opacity-0'
-      }`}
+      className="min-h-screen w-full bg-white text-gray-900 flex flex-col items-center justify-center px-6 md:px-20 py-32 relative overflow-hidden"
+      style={{
+        '--color-1': '#6366f1',
+        '--color-2': '#8b5cf6',
+        '--color-3': '#ec4899',
+      } as React.CSSProperties}
     >
-      {/* Animated gradient mesh background */}
-      <div className="absolute inset-0 z-0 opacity-20 pointer-events-none overflow-hidden">
-        <motion.div 
-          className="absolute inset-0 bg-mesh-pattern"
-          style={{
-            x: mouseX,
-            y: mouseY
-          }}
-        />
+      {/* Dynamic gradient background */}
+      <motion.div 
+        className="absolute inset-0 z-0 opacity-10 pointer-events-none"
+        style={{
+          background: gradientBackground,
+          transition: 'background 0.4s ease-out'
+        }}
+      />
+      
+      {/* Floating grid pattern */}
+      <div className="absolute inset-0 z-0 opacity-5 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern" />
         <style jsx>{`
-          .bg-mesh-pattern {
+          .bg-grid-pattern {
             background-image: 
-              radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 30%),
-              radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 25%),
-              radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 25%);
-            background-size: 200% 200%;
+              linear-gradient(to right, currentColor 1px, transparent 1px),
+              linear-gradient(to bottom, currentColor 1px, transparent 1px);
+            background-size: 40px 40px;
           }
         `}</style>
       </div>
-
-      {/* Floating particles */}
-      {[...Array(8)].map((_, i) => (
+      
+      {/* Floating 3D cards */}
+      {isMounted && floatingCards.map((card) => (
         <motion.div
-          key={i}
-          className={`absolute rounded-full ${i % 3 === 0 ? 'bg-blue-400' : i % 2 === 0 ? 'bg-indigo-400' : 'bg-pink-400'} opacity-30`}
+          key={card.id}
+          className="absolute rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-sm shadow-lg p-6"
           style={{
-            width: Math.random() * 10 + 5,
-            height: Math.random() * 10 + 5,
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
+            width: `${100 + card.id * 30}px`,
+            height: `${120 + card.id * 30}px`,
+            x: `${card.x}px`,
+            y: `${card.y}px`,
+            rotate: `${card.rotation}deg`,
+            scale: card.scale,
+            zIndex: card.zIndex
           }}
           animate={{
-            y: [0, (Math.random() - 0.5) * 100],
-            x: [0, (Math.random() - 0.5) * 50],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: Math.random() * 10 + 10,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'easeInOut',
-            delay: Math.random() * 5
+            x: `${card.x + (Math.random() * 20 - 10)}px`,
+            y: `${card.y + (Math.random() * 20 - 10)}px`,
+            transition: { 
+              duration: 8,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: "easeInOut"
+            }
           }}
         />
       ))}
 
-      {/* Main content container */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12 w-full max-w-6xl"
-      >
+      {/* Main content */}
+      <div ref={ref} className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-16">
         {/* Text content */}
-        <motion.div className="max-w-2xl text-center md:text-left space-y-8 px-4">
-          <motion.h1 
-            variants={item}
-            className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight"
-            style={{ 
-              backgroundImage: textGradient,
-              WebkitBackgroundClip: 'text',
-              backgroundClip: 'text',
-              color: 'transparent'
-            }}
+        <div className="flex-1 space-y-8 text-center lg:text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
           >
-            Build smarter.<br className="hidden md:block" /> Connect <span className="whitespace-nowrap">faster.</span>
-          </motion.h1>
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+              <span className="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
+              <span className="text-sm font-medium text-blue-600">Now in public beta</span>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Next-gen
+              </span>{' '}
+              <br />
+              collaboration for{' '}
+              <span className="relative inline-block">
+                <span className="relative z-10">modern teams</span>
+                <motion.span 
+                  className="absolute bottom-0 left-0 w-full h-3 bg-blue-100/80 z-0"
+                  animate={{
+                    width: ['0%', '100%', '0%'],
+                    left: ['0%', '0%', '100%'],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                    ease: "easeInOut"
+                  }}
+                />
+              </span>
+            </h1>
+            
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Streamline your workflow with our AI-powered platform that connects your tools, team, and processes in one unified workspace.
+            </p>
+          </motion.div>
           
-          <motion.p 
-            variants={item}
-            className="text-lg md:text-xl text-gray-500 leading-relaxed"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            Discover how creators and teams use <span className="font-semibold text-blue-600">Lynk</span> to accelerate product workflows, connect ideas, and ship faster with purpose.
-          </motion.p>
-          
-          <motion.div 
-            variants={container}
-            className="flex flex-col sm:flex-row justify-center md:justify-start gap-4"
-          >
-            <motion.button 
-              variants={item}
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.4)'
-              }}
-              whileTap={{ 
-                scale: 0.95,
-                boxShadow: '0 5px 15px -5px rgba(59, 130, 246, 0.4)'
-              }}
-              className="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-lg font-medium transition-all relative overflow-hidden group"
-            >
-              <span className="relative z-10">Start Building</span>
+            <button className="relative px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-medium overflow-hidden group">
+              <span className="relative z-10">Get Started Free</span>
               <motion.span 
-                className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                 initial={{ opacity: 0 }}
               />
-            </motion.button>
+            </button>
             
-            <motion.button 
-              variants={item}
-              whileHover={{ 
-                scale: 1.05,
-                backgroundColor: 'rgba(239, 246, 255, 1)'
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3.5 border-2 border-blue-600 text-blue-600 rounded-xl text-lg font-medium transition-all hover:shadow-md"
-            >
-              Learn More
-            </motion.button>
+            <button className="px-8 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors flex items-center gap-2">
+              <span>See how it works</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
           </motion.div>
-        </motion.div>
-
-        {/* Image container */}
-        <motion.div 
-          className="relative px-4"
-          variants={container}
-        >
-          {/* Decorative shapes */}
+          
+          {/* Trust indicators */}
           <motion.div
-            className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-3xl z-0 blur-xl"
-            variants={item}
-            custom={0}
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-12 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 text-gray-500"
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white"></div>
+                ))}
+              </div>
+              <span className="text-sm">Join 10,000+ teams</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="text-sm">99.9% uptime</span>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Hero image/illustration */}
+        <motion.div 
+          className="relative w-full max-w-2xl aspect-square"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          {/* Main illustration with floating effect */}
+          <motion.div
             animate={{
-              rotate: [0, 5, 0],
-              borderRadius: ["20%", "25%", "20%"]
+              y: [0, -15, 0],
             }}
             transition={{
-              duration: 12,
+              duration: 8,
               repeat: Infinity,
-              repeatType: 'reverse',
               ease: "easeInOut"
             }}
-          />
-          
-          <motion.div
-            className="absolute -bottom-10 -right-10 w-72 h-72 bg-indigo-100 rounded-[40%] z-0 blur-xl"
-            variants={item}
-            custom={1}
-            animate={{
-              rotate: [0, -8, 0],
-              borderRadius: ["40%", "35%", "40%"]
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              repeatType: 'reverse',
-              ease: "easeInOut",
-              delay: 2
-            }}
-          />
-          
-          {/* Main image with 3D tilt effect */}
-          <motion.div
-            variants={item}
-            custom={2}
-            className="relative z-10"
-            style={{
-              rotateX: mouseY,
-              rotateY: mouseX,
-            }}
-            transition={{ type: "spring", damping: 20, stiffness: 100 }}
+            className="relative z-10 w-full h-full"
           >
-            <motion.div
-              variants={floating}
-              animate="float"
-              className="rounded-3xl overflow-hidden shadow-2xl border-8 border-white/90"
-            >
+            <div className="relative w-full h-full">
+              <div className="absolute inset-0 rounded-full overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-violet-500/20 mix-blend-overlay"></div>
+                <div className="absolute inset-0 rounded-full border-[12px] border-white/20 mix-blend-overlay"></div>
+                <div className="absolute inset-0 rounded-full shadow-[inset_0_0_30px_10px_rgba(255,255,255,0.5)]"></div>
+              </div>
               <Image
                 src="/assets/hero.jpg"
-                alt="Hero Illustration"
-                width={600}
-                height={600}
-                className="w-full h-auto aspect-square object-cover relative z-10"
+                alt="Dashboard preview"
+                width={800}
+                height={800}
+                className="w-full h-auto object-contain rounded-full"
                 priority
               />
-            </motion.div>
+            </div>
+          </motion.div>
+          
+          {/* Floating UI elements */}
+          <motion.div
+            className="absolute top-10 -left-10 w-24 h-24 bg-white rounded-xl shadow-lg border border-gray-100 p-3"
+            animate={{
+              y: [0, -20, 0],
+              rotate: [0, 5, 0],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5
+            }}
+          >
+            <div className="w-full h-full bg-blue-50 rounded-lg"></div>
+          </motion.div>
+          
+          <motion.div
+            className="absolute -bottom-5 -right-5 w-28 h-28 bg-white rounded-xl shadow-lg border border-gray-100 p-3"
+            animate={{
+              y: [0, 15, 0],
+              rotate: [0, -5, 0],
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          >
+            <div className="w-full h-full bg-indigo-50 rounded-lg"></div>
           </motion.div>
           
           {/* Glowing highlight */}
           <motion.div 
-            className="absolute top-1/4 -right-5 w-24 h-24 bg-blue-400 rounded-full z-0 blur-3xl opacity-20"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-full bg-blue-500 blur-3xl opacity-10 pointer-events-none"
             animate={{
               scale: [1, 1.2, 1],
-              opacity: [0.2, 0.3, 0.2]
+              opacity: [0.1, 0.15, 0.1]
             }}
             transition={{
-              duration: 5,
+              duration: 8,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
         </motion.div>
-      </motion.div>
-
-      {/* Animated scroll indicator */}
+      </div>
+      
+      {/* Scroll indicator */}
       <motion.div 
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 flex flex-col items-center"
-        variants={item}
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <div className="text-sm text-blue-600 font-medium mb-2">Scroll to explore</div>
         <motion.div
-          className="w-8 h-12 border-2 border-blue-600 rounded-full flex justify-center p-1"
+          className="w-8 h-12 border-2 border-gray-300 rounded-full flex justify-center p-1"
           animate={{
-            borderColor: ['rgba(59, 130, 246, 1)', 'rgba(99, 102, 241, 1)', 'rgba(59, 130, 246, 1)']
+            borderColor: ['rgba(209, 213, 219, 1)', 'rgba(165, 180, 252, 1)', 'rgba(209, 213, 219, 1)']
           }}
           transition={{
             duration: 3,
@@ -333,7 +332,7 @@ export default function Hero() {
           }}
         >
           <motion.div 
-            className="w-1 h-3 bg-gradient-to-b from-blue-600 to-indigo-600 rounded-full mt-1"
+            className="w-1 h-3 bg-gradient-to-b from-gray-400 to-gray-500 rounded-full mt-1"
             animate={{
               y: [0, 8, 0],
               opacity: [0.6, 1, 0.6]

@@ -39,7 +39,7 @@ export default function FAQSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Frequently Asked Questions</h2>
-          <p className="text-gray-500 md:text-lg">Everything you need to know about Lynk.</p>
+          <p className="text-gray-500 md:text-normal">Everything you need to know about Lynk.</p>
         </motion.div>
 
         <div className="space-y-1">

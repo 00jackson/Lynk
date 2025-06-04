@@ -3,52 +3,108 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 const features = [
-  { icon: '/assets/feature1.png', text: 'Match with micro-projects from real-world businesses instantly.' },
-  { icon: '/assets/feature2.png', text: 'Get on-demand 1:1 coaching and expert feedback in minutes.' },
-  { icon: '/assets/feature3.png', text: 'Track your skills, growth trajectory, and receive endorsements.' },
-  { icon: '/assets/feature4.png', text: 'Build in public, showcase progress, and gain real feedback.' },
-  { icon: '/assets/feature5.png', text: 'Offer bounties or premium coaching sessions to stand out.' },
-  { icon: '/assets/feature6.png', text: 'Earn XP, climb leaderboards, and collect contribution badges.' },
+  {
+    icon: '/assets/feature1.png',
+    title: 'Instant Project Matching',
+    text: 'Match with micro-projects from real-world businesses instantly.',
+    highlight: true
+  },
+  {
+    icon: '/assets/feature2.png',
+    title: 'Expert Coaching',
+    text: 'Get on-demand 1:1 coaching and expert feedback in minutes.',
+    highlight: true
+  },
+  {
+    icon: '/assets/feature3.png',
+    title: 'Skill Tracking',
+    text: 'Track your skills, growth trajectory, and receive endorsements.',
+    highlight: false
+  },
+  {
+    icon: '/assets/feature4.png',
+    title: 'Public Building',
+    text: 'Build in public, showcase progress, and gain real feedback.',
+    highlight: false
+  },
+  {
+    icon: '/assets/feature5.png',
+    title: 'Premium Offerings',
+    text: 'Offer bounties or premium coaching sessions to stand out.',
+    highlight: false
+  },
+  {
+    icon: '/assets/feature6.png',
+    title: 'Gamified Learning',
+    text: 'Earn XP, climb leaderboards, and collect contribution badges.',
+    highlight: false
+  },
 ];
 
 export default function FeatureOverview() {
   return (
-    <section className="w-full max-w-6xl mx-auto px-4 py-24 relative">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        variants={{
-          hidden: { opacity: 0, y: 40 },
-          visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } },
-        }}
-        viewport={{ once: true }}
-      >
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative">
+      <div className="text-center mb-16">
         <motion.h2
-          className="w-fit mx-auto mb-14 text-4xl font-extrabold text-white bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-full shadow-lg text-center"
+          className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
         >
-          Launch. Learn. Lead.
+          Accelerate Your Growth
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-          {features.map(({ icon, text }, index) => (
-            <motion.div
-              key={index}
-              className="flex items-start gap-6 p-6 rounded-3xl shadow-xl bg-white hover:shadow-2xl transition-shadow border border-blue-100 hover:border-blue-300 hover:scale-[1.02] transform duration-300 ease-in-out"
-              variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-            >
-              <div className="w-14 h-14 flex-shrink-0 bg-blue-50 rounded-xl flex items-center justify-center shadow-sm">
-                <Image src={icon} alt="feature icon" width={56} height={56} className="object-contain" />
+        {/* <motion.p
+          className="text-lg text-gray-600 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          Everything you need to launch, learn, and lead in your tech career
+        </motion.p> */}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+        {features.map(({ icon, title, text, highlight }, index) => (
+          <motion.div
+            key={index}
+            className={`relative rounded-xl p-8 ${highlight ? 'bg-gradient-to-br from-blue-500 to-indigo-600' : 'bg-white'} ${highlight ? 'shadow-lg' : 'shadow-md'} border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300`}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            {highlight && (
+              <div className="absolute top-3 right-3 px-3 py-1 bg-white text-blue-600 font-semibold rounded-full text-sm shadow-sm">
+                Popular
               </div>
-              <p className="text-gray-800 text-lg leading-relaxed">{text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-      <div className="absolute inset-0 -z-10 pointer-events-none opacity-10">
-        <div className="absolute top-0 left-1/3 w-96 h-96 bg-blue-400 rounded-full blur-3xl opacity-30"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400 rounded-full blur-3xl opacity-20"></div>
+            )}
+            <div className={`w-14 h-14 mb-6 rounded-lg flex items-center justify-center ${highlight ? 'bg-white/20' : 'bg-blue-50'}`}>
+              <Image 
+                src={icon} 
+                alt={title} 
+                width={28} 
+                height={28} 
+                className={`object-contain ${highlight ? 'filter brightness-0 invert' : ''}`}
+              />
+            </div>
+            <h3 className={`text-xl font-semibold mb-3 ${highlight ? 'text-white' : 'text-gray-900'}`}>
+              {title}
+            </h3>
+            <p className={`${highlight ? 'text-blue-100' : 'text-gray-600'}`}>
+              {text}
+            </p>
+            {highlight && (
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/30"></div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-20"></div>
+        <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-indigo-100 rounded-full blur-3xl opacity-20"></div>
       </div>
     </section>
   );

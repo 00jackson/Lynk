@@ -146,12 +146,12 @@ export default function PremiumSection() {
               whileHover={{ scale: plan.highlighted ? 1.03 : 1.01 }}
               className={`bg-white rounded-xl shadow-sm overflow-hidden border-2 ${
                 plan.highlighted 
-                  ? 'border-blue-500 shadow-lg' 
+                  ? 'border-yellow-600 shadow-lg' 
                   : 'border-gray-200'
               } transition-all`}
             >
               {plan.highlighted && (
-                <div className="bg-blue-500 text-white text-center py-2 text-sm font-medium">
+                <div className="bg-yellow-600 text-white text-center py-2 text-sm font-medium">
                   Most Popular
                 </div>
               )}
@@ -174,8 +174,8 @@ export default function PremiumSection() {
                 <button
                   className={`w-full py-3 px-4 rounded-lg font-medium ${
                     plan.highlighted
-                      ? 'bg-blue-600 text-white hover:bg-blue-700'
-                      : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                      ? 'bg-yellow-600 text-white hover:bg-yellow-700'
+                      : 'bg-blue-600 text-gray-100 hover:bg-blue-500'
                   } transition-colors`}
                 >
                   {plan.cta}

@@ -121,8 +121,7 @@ const radarOptions = {
 };
 
 export default function SkillTrackingSection() {
-  // ... (keep your existing state and data)
-  const [streakType, setStreakType] = useState<"daily" | "weekly">("daily");
+  // ... 
 
   // Streak data
   const streakDays: StreakDay[] = [
@@ -154,7 +153,7 @@ export default function SkillTrackingSection() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+            className="text-5xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
           >
             Your Learning Dashboard
           </motion.h2>
@@ -162,7 +161,7 @@ export default function SkillTrackingSection() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg"
+            className="text-gray-600 max-w-2xl mx-auto text-normal md:text-lg"
           >
             Visualized progress in a clean, distraction-free interface
           </motion.p>

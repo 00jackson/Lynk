@@ -15,7 +15,7 @@ import { Footer } from "./sections/Footer";
 
 export default function Home() {
   return (
-    <main>
+    <main className="gap-10">
       <Hero />
       <FeatureOverview />
       <ProjectMatchmaking/>
