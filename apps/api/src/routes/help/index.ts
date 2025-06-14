@@ -5,12 +5,21 @@ const router = Router();
 const prisma = new PrismaClient();
 
 // Create help request
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', async function handlePostHelpRequest(req: Request, res: Response): Promise<void> {
   console.log('[API] POST /api/help route hit');
   try {
     const { userId, message } = req.body;
     if (!userId || !message) {
       res.status(400).json({ error: 'Missing userId or message' });
+      return;
+    }
+
+    const existingUser = await prisma.userProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!existingUser) {
+      res.status(404).json({ error: 'User not found. Please sign up first.' });
       return;
     }
 
@@ -20,13 +29,15 @@ router.post('/', async (req: Request, res: Response) => {
     });
 
     res.status(201).json(helpRequest);
+    return;
   } catch (err: any) {
     console.error('Help request error:', err);
     res.status(500).json({ error: 'Failed to submit help request' });
+    return;
   }
 });
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', async function handlePatchHelpRequest(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
     const { status, coachId } = req.body;
@@ -45,19 +56,20 @@ router.patch('/:id', async (req: Request, res: Response) => {
     });
 
     res.status(200).json(updated);
+    return;
   } catch (err: any) {
     console.error('Update help request error:', err);
     res.status(500).json({ error: 'Failed to update help request' });
+    return;
   }
 });
 
 // Get help requests (optional filter by userId or status)
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async function handleGetHelpRequests(req: Request, res: Response): Promise<void> {
   try {
-
     const { userId, status } = req.query;
     const { coachId } = req.query;
-    
+
     const helpRequests = await prisma.helpRequest.findMany({
       where: {
         ...(userId ? { userId: String(userId) } : {}),
@@ -71,6 +83,7 @@ router.get('/', async (req: Request, res: Response) => {
   } catch (err: any) {
     console.error('Fetch help requests error:', err);
     res.status(500).json({ error: 'Failed to fetch help requests' });
+    return;
   }
 });
 

@@ -28,6 +28,8 @@ export function setupSocket(server: HttpServer) {
       if (!rooms[roomId].includes(userId)) rooms[roomId].push(userId);
 
       io.to(roomId).emit('users:active', rooms[roomId]);
+      io.to(roomId).emit('participants:joined', { userId });
+      io.to(roomId).emit('participants:update', rooms[roomId]);
       console.log(`[Room ${roomId}] ${userId} joined`);
 
       const socketsInRoom = io.sockets.adapter.rooms.get(roomId);
@@ -44,6 +46,8 @@ export function setupSocket(server: HttpServer) {
       if (rooms[roomId]) {
         rooms[roomId] = rooms[roomId].filter(id => id !== userId);
         io.to(roomId).emit('users:active', rooms[roomId]);
+        io.to(roomId).emit('participants:left', { userId });
+        io.to(roomId).emit('participants:update', rooms[roomId]);
       }
       console.log(`[Room ${roomId}] ${userId} left`);
     });
@@ -72,6 +76,8 @@ export function setupSocket(server: HttpServer) {
         if (rooms[roomId]) {
           rooms[roomId] = rooms[roomId].filter(id => id !== userId);
           io.to(roomId).emit('users:active', rooms[roomId]);
+          io.to(roomId).emit('participants:left', { userId });
+          io.to(roomId).emit('participants:update', rooms[roomId]);
         }
         delete socketToRoom[socket.id];
         console.log(`[Room ${roomId}] ${userId} disconnected`);

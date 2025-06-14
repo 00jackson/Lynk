@@ -159,7 +159,7 @@ export default function Hero() {
               <span className="relative inline-block">
                 <span className="relative z-10">modern teams</span>
                 <motion.span 
-                  className="absolute bottom-0 left-0 w-full h-3 bg-blue-100/80 z-0"
+                  className="absolute bottom-0 left-0 w-full h-1 bg-blue-600/80 z-0"
                   animate={{
                     width: ['0%', '100%', '0%'],
                     left: ['0%', '0%', '100%'],

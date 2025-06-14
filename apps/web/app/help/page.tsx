@@ -1,222 +1,196 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { marked } from 'marked';
+
+type HelpRequest = {
+  id: string;
+  message: string;
+  status: 'pending' | 'completed';
+  createdAt: string;
+  aiSuggestion?: string;
+};
 
 export default function HelpPage() {
   const [message, setMessage] = useState('');
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [userRequests, setUserRequests] = useState<any[]>([]);
-  const [coachRequests, setCoachRequests] = useState<any[]>([]);
-  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'resolved'>('all');
-
-  const userId = 'clrk_xyz123'; // Replace with real session/user id
-  const coachId = 'clrk_coach123'; // Replace with real session/coach id
-
-  useEffect(() => {
-    const fetchRequests = async () => {
-      const userRes = await fetch(`http://localhost:4001/api/help?userId=${userId}`);
-      const coachRes = await fetch(`http://localhost:4001/api/help?coachId=${coachId}`);
-
-      if (userRes.ok) setUserRequests(await userRes.json());
-      if (coachRes.ok) setCoachRequests(await coachRes.json());
-    };
-
-    fetchRequests();
-  }, []);
+  const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAiThinking, setIsAiThinking] = useState(false);
+  const [requests, setRequests] = useState<HelpRequest[]>([]);
+  const [viewingRequestId, setViewingRequestId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('submitting');
+    setIsLoading(true);
+    setAiSuggestion(null);
 
-    const res = await fetch('http://localhost:4001/api/help', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, message }),
-    });
+    try {
+      // Submit help request
+      const response = await fetch('http://localhost:4001/api/help', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, userId: 'clrk_abc123' }),
+      });
+      const newRequest = await response.json();
 
-    if (res.ok) {
+      // Get AI suggestion
+      setIsAiThinking(true);
+      const res = await fetch('http://localhost:4001/api/help/ai-suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+      const data = await res.json();
+      setIsAiThinking(false);
+
+      const requestWithSuggestion = {
+        ...newRequest,
+        status: 'pending',
+        aiSuggestion: data.suggestion || 'No AI suggestion available'
+      };
+
+      setRequests(prev => [requestWithSuggestion, ...prev]);
+      setAiSuggestion(data.suggestion || null);
+    } catch (err) {
+      setIsAiThinking(false);
+      setAiSuggestion('Failed to get AI suggestion. Please try again.');
+    } finally {
+      setIsLoading(false);
       setMessage('');
-      setStatus('success');
-      // Refresh requests after submission
-      const userRes = await fetch(`http://localhost:4001/api/help?userId=${userId}`);
-      if (userRes.ok) setUserRequests(await userRes.json());
-    } else {
-      setStatus('error');
     }
   };
 
+  const currentRequest = viewingRequestId 
+    ? requests.find(req => req.id === viewingRequestId)
+    : null;
+
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden"
-      >
-        {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
-          <h1 className="text-2xl font-bold">Need Help?</h1>
-          <p className="mt-1 opacity-90">Ask a coach anything. Live or async — we've got your back.</p>
-        </div>
-
-        {/* Help Request Form */}
-        <div className="p-6 border-b border-gray-100">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="help-message" className="block text-sm font-medium text-gray-700 mb-1">
-                Describe your issue
-              </label>
-              <textarea
-                id="help-message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="What do you need help with today?"
-                required
-              />
-            </div>
-            <div className="flex justify-end">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={status === 'submitting'}
-                className={`px-6 py-3 rounded-lg font-medium text-white transition-all ${
-                  status === 'submitting' ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-                } shadow-sm flex items-center`}
+    <main className="min-h-screen bg-gray-50 p-4 md:p-8">
+      <div className="max-w-3xl mx-auto space-y-6">
+        {/* Current conversation view */}
+        {currentRequest ? (
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <button 
+                onClick={() => setViewingRequestId(null)}
+                className="text-blue-600 hover:text-blue-800 flex items-center"
               >
-                {status === 'submitting' ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Submitting...
-                  </>
-                ) : (
-                  'Request Help'
-                )}
-              </motion.button>
-            </div>
-          </form>
-
-          <AnimatePresence>
-            {status === 'success' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="mt-4 p-3 bg-green-50 text-green-700 rounded-lg flex items-start"
-              >
-                <svg className="h-5 w-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                 </svg>
-                Help request submitted! A coach will respond soon.
-              </motion.div>
-            )}
-            {status === 'error' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-start"
-              >
-                <svg className="h-5 w-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                </svg>
-                Failed to submit request. Please try again.
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                Back to all requests
+              </button>
+              <span className={`px-2 py-1 text-xs rounded-full ${
+                currentRequest.status === 'pending' 
+                  ? 'bg-yellow-100 text-yellow-800' 
+                  : 'bg-green-100 text-green-800'
+              }`}>
+                {currentRequest.status}
+              </span>
+            </div>
 
-        {/* Requests Sections */}
-        <div className="divide-y divide-gray-100">
-          {/* User Requests Section */}
-          <div className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Your Help Requests</h2>
-              <div className="flex items-center">
-                <label htmlFor="filter" className="mr-2 text-sm text-gray-600">Filter:</label>
-                <select
-                  id="filter"
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value as 'all' | 'pending' | 'resolved')}
-                  className="border border-gray-200 rounded-md px-3 py-1 text-sm focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="all">All</option>
-                  <option value="pending">Pending</option>
-                  <option value="resolved">Resolved</option>
-                </select>
+            <div className="p-4">
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-medium text-gray-500 mb-2">Your request</h3>
+                <p className="text-gray-800">{currentRequest.message}</p>
               </div>
-            </div>
 
-            <ul className="space-y-3">
-              {userRequests
-                .filter((req) => filterStatus === 'all' ? true : req.status === filterStatus)
-                .map((req) => (
-                  <motion.li 
-                    key={req.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="p-4 bg-gray-50 border border-gray-100 rounded-lg hover:bg-gray-100 transition-colors"
-                  >
-                    <p className="text-gray-800">{req.message}</p>
-                    <div className="mt-2 flex items-center text-sm">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        req.status === 'pending' 
-                          ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-green-100 text-green-800'
-                      }`}>
-                        {req.status}
-                      </span>
-                      <span className="ml-2 text-gray-500">
-                        {new Date(req.createdAt).toLocaleString()}
-                      </span>
-                    </div>
-                  </motion.li>
-                ))}
-              {userRequests.length === 0 && (
-                <div className="text-center py-6 text-gray-500">
-                  No help requests found
+              {currentRequest.aiSuggestion && (
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h3 className="text-sm font-medium text-gray-500 mb-2">AI Assistant response</h3>
+                  <div 
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: marked.parse(currentRequest.aiSuggestion) }}
+                  />
                 </div>
               )}
-            </ul>
-          </div>
-
-          {/* Coach Requests Section */}
-          {coachRequests.length > 0 && (
-            <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Coaching Assignments</h2>
-              <ul className="space-y-3">
-                {coachRequests.map((req) => (
-                  <motion.li 
-                    key={req.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="p-4 bg-white border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors shadow-xs"
-                  >
-                    <p className="text-gray-800">{req.message}</p>
-                    <div className="mt-2 flex items-center text-sm">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        req.status === 'pending' 
-                          ? 'bg-yellow-100 text-yellow-800' 
-                          : 'bg-green-100 text-green-800'
-                      }`}>
-                        {req.status}
-                      </span>
-                      <span className="ml-2 text-gray-500">
-                        {new Date(req.createdAt).toLocaleString()}
-                      </span>
-                    </div>
-                  </motion.li>
-                ))}
-              </ul>
             </div>
-          )}
-        </div>
-      </motion.div>
-    </div>
+          </div>
+        ) : (
+          <>
+            {/* New request form */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden p-4">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">How can we help? 🤖</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <textarea
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Describe your issue in detail..."
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full py-2 px-4 rounded-lg text-white font-medium ${
+                    isLoading ? 'bg-blue-300' : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                >
+                  {isLoading ? 'Getting help...' : 'Get Help'}
+                </button>
+              </form>
+
+              {isAiThinking && (
+                <div className="mt-4 flex items-center space-x-2 text-sm text-blue-600">
+                  <svg className="animate-spin h-5 w-5 text-blue-500" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  <span>AI is thinking...</span>
+                </div>
+              )}
+
+              {aiSuggestion && (
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                  <h3 className="text-sm font-medium text-blue-800 mb-2">AI Assistant</h3>
+                  <div 
+                    className="prose prose-sm max-w-none text-blue-900"
+                    dangerouslySetInnerHTML={{ __html: marked.parse(aiSuggestion) }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Previous requests */}
+            {requests.length > 0 && (
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="p-4 border-b border-gray-200">
+                  <h2 className="text-lg font-medium text-gray-800">Previous requests</h2>
+                </div>
+                <ul className="divide-y divide-gray-200">
+                  {requests.map(request => (
+                    <li key={request.id} className="p-4 hover:bg-gray-50 cursor-pointer">
+                      <button 
+                        onClick={() => setViewingRequestId(request.id)}
+                        className="w-full text-left"
+                      >
+                        <div className="flex justify-between items-start">
+                          <p className="text-gray-800 line-clamp-2">
+                            {request.message}
+                          </p>
+                          <span className={`ml-2 flex-shrink-0 px-2 py-1 text-xs rounded-full ${
+                            request.status === 'pending' 
+                              ? 'bg-yellow-100 text-yellow-800' 
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {request.status}
+                          </span>
+                        </div>
+                        {request.aiSuggestion && (
+                          <p className="mt-2 text-sm text-gray-500 line-clamp-1">
+                            <span className="text-blue-600">AI:</span> {request.aiSuggestion.replace(/(\*\*|\*|`)/g, '').substring(0, 100)}...
+                          </p>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </main>
   );
 }

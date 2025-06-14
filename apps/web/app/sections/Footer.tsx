@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 import { FaGithub, FaTwitter, FaLinkedin, FaDiscord } from "react-icons/fa";
 import { motion } from "framer-motion";

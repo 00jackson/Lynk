@@ -1,29 +1,49 @@
 'use client';
-// import { motion } from "framer-motion";
-// import Image from "next/image";
+import { useState, useEffect, Suspense } from 'react';
+import Loading from '@/components/Loading';
 import Hero from "./sections/Hero";
-import FeatureOverview from "./sections/FeatureOverview";
-import ProjectMatchmaking from "./sections/ProjectMatchmaking";
-import MicroCoaching from "./sections/MicroCoaching";
-import SkillTrackingSection from "./sections/SkillTracking";
-// import HowItWorks from "./sections/HowItWorks";
-import FAQSection from "./sections/FAQsection";
-import PremiumSection from "./sections/PremiumSection";
-import { Footer } from "./sections/Footer";
-// import LiveUsers from "./sections/LiveUsers";
-// import TechStack from "./sections/TechStack";
+import Testimonials from './sections/Testimonials';
+import FeatureOverview from './Features/page';
+import FAQSection from './FAQ/page';
+
+import MicroCoaching from './sections/MicroCoaching';
+import PremiumSection from './Pricing/page';
+import ProjectMatchmaking from './Community/page';
+import SkillTrackingSection from './sections/SkillTracking';
+import { Footer } from './sections/Footer'
+// import DocsPage from './docs/page';
+// ... other imports
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // This would be replaced with actual loading logic
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <main className="gap-10">
-      <Hero />
-      <FeatureOverview />
-      <ProjectMatchmaking/>
-      <MicroCoaching/>
-      <SkillTrackingSection/>
-      <PremiumSection/>
-      <FAQSection/>
-      <Footer/>
+      <Suspense fallback={<Loading />}>
+        <Hero />
+        {/* <DocsPage /> */}
+        <Testimonials />
+        <FeatureOverview />
+        <ProjectMatchmaking />2
+        <MicroCoaching />
+        <SkillTrackingSection />
+        <PremiumSection />
+        <FAQSection />
+        <Footer />
+      </Suspense>
     </main>
   );
 }
